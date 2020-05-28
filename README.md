@@ -1,2 +1,4 @@
-# EmbodiedAI
-Repository for the Emobided AI course at Vrije Universiteit Amsterdam 2020
+# EmbodiedAI 2020
+This repository containts the practical materials for the Embodied Artificial Intelligence course.
+
+
