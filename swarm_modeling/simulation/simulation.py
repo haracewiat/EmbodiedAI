@@ -1,9 +1,6 @@
 import pygame
 import sys
 from experiments.flocking.flock import Flock
-from experiments.covid.population import Population
-from experiments.aggregation.aggregation import Aggregations
-
 
 """
 General simulation pipeline, suitable for all experiments 
