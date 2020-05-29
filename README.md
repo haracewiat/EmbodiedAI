@@ -1,13 +1,25 @@
 # EmbodiedAI 2020
-This repository containts the practical materials for the Embodied Artificial Intelligence course.
+This repository contains the practical materials for the Embodied Artificial Intelligence course.
 
 ## How it works
 - The code is located in the folder `swarm modeling`
-  - The file **CodeTutorial** contains a detailed description of the code 
 - The assignmetns are located in the folder `assignments`
 
 
 ## Examples 
-For the first week assignment we have provided you with a 'desired' outcome example as an insipiration for your own work:
+Here are some flocking examples for the 1st Assignment:
+
+No obstacle present:
+
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/no_obstacle.gif)
+
+Boids outside a convex object:
+
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/convex_outside.gif)
 
 
+Boids inside a convex object:
+
+
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/convex_inside.gif)
+ 

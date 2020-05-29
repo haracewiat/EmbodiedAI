@@ -74,5 +74,3 @@ WANDER_WEIGHT=0.01
 
 
 
-
-
