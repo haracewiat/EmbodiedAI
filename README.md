@@ -3,7 +3,6 @@ This repository contains the practical materials for the Embodied Artificial Int
 
 ## How it works
 - The code is located in the folder `swarm modeling`
-- The assignmetns are located in the folder `assignments`
 
 
 ## Examples 
