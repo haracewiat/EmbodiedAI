@@ -29,13 +29,10 @@ class Boid(Agent):
         align_force, cohesion_force, separate_force = self.neighbor_forces()
 
         #combine the vectors in one
-        total_force = self.wander(p.WANDER_DIST,p.WANDER_RADIUS,p.WANDER_ANGLE) * p.WANDER_WEIGHT\
-                + align_force * p.ALIGNMENT_WEIGHT \
-                + cohesion_force * p.COHESION_WEIGHT\
-                + separate_force * p.SEPERATION_WEIGHT
+        steering_force = align_force * p.ALIGNMENT_WEIGHT  + cohesion_force * p.COHESION_WEIGHT + separate_force * p.SEPARATION_WEIGHT
 
         #adjust the direction of the boid
-        self.steering += helperfunctions.truncate(total_force / self.mass, p.MAX_FORCE)
+        self.steering += helperfunctions.truncate(steering_force / self.mass, p.MAX_FORCE)
 
 
     def neighbor_forces(self):

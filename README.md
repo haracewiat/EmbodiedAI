@@ -2,7 +2,7 @@
 This repository contains the practical materials for the Embodied Artificial Intelligence course.
 
 ## How it works
-- The code is located in the folder `swarm modeling`
+To run the code simply execute the main.py file. For more detailed overview of the code structure and functionality, please see the canvas page for the supplementary document 'CodeTutorial'
 
 
 ## Examples 
