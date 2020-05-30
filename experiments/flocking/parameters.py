@@ -19,6 +19,7 @@ SWARM = 'Flock'
 N_AGENTS = 40
 #object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
+CONVEX = True
 
 
 #Agent Settings:
@@ -35,8 +36,6 @@ MIN_SPEED = 4.
 
 
 #Boid Settings:
-#view of neighbor agents
-RADIUS_VIEW=70
 #velocity force
 MAX_FORCE = 8.
 
@@ -49,16 +48,18 @@ Flock class parameters (defines the environment of where the flock to act)
 """
 #Define the environment
 OBSTACLES = True
-OUTSIDE = True
-CONVEX = True
+OUTSIDE = False
+
 
 """
 Boid class parameters
 """
+#view of neighbor agents
+RADIUS_VIEW=70
 #weights for velocity forces
-COHESION_WEIGHT = 3.5
-ALIGNMENT_WEIGHT = 4.5
-SEPARATION_WEIGHT = 6.
+COHESION_WEIGHT = 0.
+ALIGNMENT_WEIGHT = 0.
+SEPARATION_WEIGHT = 0.
 
 
 
