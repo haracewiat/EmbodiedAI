@@ -2,11 +2,11 @@
 This repository contains the practical materials for the Embodied Artificial Intelligence course.
 
 ## How it works
-To run the code simply execute the main.py file. For more detailed overview of the code structure and functionality, please see the canvas page for the supplementary document 'CodeTutorial'
+To run the code simply execute the main.py file. For more detailed overview of the code structure and functionality, please see the supplementary document 'CodeTutorial'
 
 
 ## Examples 
-Here are some flocking examples for the 1st Assignment:
+Here are some flocking examples for the 0th Assignment:
 
 No obstacle present:
 
