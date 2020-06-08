@@ -10,29 +10,16 @@ Here are some flocking examples for the 1st Assignment:
 
 About Stage 1:
 
-![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt0.mp4)
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt0.gif)
 
 
 About Experiment 1:
 
 
-![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt1.mov)
+![alt text](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt1.PNG?raw=true)
 
 
 About Experiment 2:
 
 
-![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt2.mp4)
-
-
-About Experiment 3:
-
-
-![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt3.mov)
-
-
-About Experiment 4:
-
-
-![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt4.mp4)
- 
+![alt text](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt2.png?raw=true)
