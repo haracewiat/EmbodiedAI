@@ -1,7 +1,8 @@
 from simulation.simulation import Simulation
 import pygame
 
-from experiments.flocking import parameters as p
+# from experiments.flocking import parameters as p
+from experiments.aggregation import parameters as p
 
 
 """
