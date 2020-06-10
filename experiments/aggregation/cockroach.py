@@ -7,7 +7,7 @@ from experiments.aggregation import parameters as p
 
 class Cockroach(Agent):
 
-    def __init__(self, pos, v, flock, image='experiments/aggregation/images/ant.png'):
+    def __init__(self, pos, v, flock, image='experiments/aggregation/images/cockroach.png'):
         super(Cockroach, self).__init__(pos, v, image,
                                         max_speed=p.MAX_SPEED, min_speed=p.MIN_SPEED,
                                         mass=p.MASS, width=p.WIDTH, height=p.HEIGHT,
@@ -15,6 +15,7 @@ class Cockroach(Agent):
 
         self.flock = flock
 
+    # Describes how the agents interact with the aggregation sites and the constricted area
     def update_actions(self):
 
         # avoid any obstacles in the environment
@@ -66,3 +67,11 @@ class Cockroach(Agent):
         """
         force = neighbor_center - self.pos
         return helperfunctions.normalize(force - self.v)
+
+    # Enables the modification of the cockroach state
+    def change_state(self):
+        pass
+
+    # Defines when the agent joins and leaves an aggregate
+    def site_behavior(self):
+        pass

@@ -25,29 +25,19 @@ class Aggregations(Swarm):
         min_y, max_y = helperfunctions.area(object_loc[1], scale[1])
 
         # Add obstacle/-s to the environment if present
-        if p.OBSTACLES:
-
-            # TODO switch to see how many obstacles
-
-            obstacles = p.EXPERIMENT
-            for obstacle in obstacles:
-                self.objects.add_object(
-                    file=obstacle.img, pos=obstacle.area_loc, scale=obstacle.scale, type='site')
+        obstacles = p.EXPERIMENT
+        for obstacle in obstacles:
+            self.objects.add_object(
+                file=obstacle.img, pos=obstacle.area_loc, scale=obstacle.scale, type='site')
 
         # Add agents to the environment
         for agent in range(num_agents):
             coordinates = helperfunctions.generate_coordinates(self.screen)
 
-            # if obstacles present re-estimate the corrdinates
-            if p.OBSTACLES:
-                if p.OUTSIDE:
-                    while coordinates[0] <= max_x and coordinates[0] >= min_x and coordinates[1] <= max_y and coordinates[1] >= min_y:
-                        coordinates = helperfunctions.generate_coordinates(
-                            self.screen)
-                else:
-                    while coordinates[0] >= max_x or coordinates[0] <= min_x or coordinates[1] >= max_y or coordinates[1] <= min_y:
-                        coordinates = helperfunctions.generate_coordinates(
-                            self.screen)
+            # Keep the cocroaches inside of the environment
+            while coordinates[0] >= max_x or coordinates[0] <= min_x or coordinates[1] >= max_y or coordinates[1] <= min_y:
+                coordinates = helperfunctions.generate_coordinates(
+                    self.screen)
 
             self.add_agent(
                 Cockroach(pos=np.array(coordinates), v=None, flock=swarm))
