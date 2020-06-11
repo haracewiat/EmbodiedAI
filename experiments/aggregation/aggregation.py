@@ -11,6 +11,12 @@ class Aggregations(Swarm):
         super(Aggregations, self).__init__(screen_size)
         self.object_loc = p.OUTSIDE
 
+        # Cockroaches data
+        self.mask1 = None
+        self.site1 = 0
+        self.site2 = 0
+        self.free = p.N_AGENTS
+
     def initialize(self, num_agents, swarm):
 
         # Add the border
@@ -26,7 +32,10 @@ class Aggregations(Swarm):
 
         # Add site/-s
         sites = p.EXPERIMENT
-        for site in sites:
+        for index, site in enumerate(sites):
+            if index == 0:
+                self.mask1 = site
+
             self.objects.add_object(
                 file=site.img, pos=site.area_loc, scale=site.scale, type='site')
 
@@ -41,6 +50,3 @@ class Aggregations(Swarm):
 
             self.add_agent(
                 Cockroach(pos=np.array(coordinates), v=None, flock=swarm))
-
-    def count_neighbours(self, neighbors):
-        return len(neighbors)

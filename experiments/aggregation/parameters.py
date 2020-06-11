@@ -15,7 +15,7 @@ FRAMES = -1
 # choose swarm type
 SWARM = 'Aggregation'
 # define the number of agents
-N_AGENTS = 20
+N_AGENTS = 40
 # object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = False
@@ -62,9 +62,9 @@ COCROACH
 # RADIUS_VIEW = int(S_HEIGHT*S_WIDTH*0.000001*70) Make it with respect to the screen size
 RADIUS_VIEW = 70
 
-# probability of leaving the site (a value between 0 and 1)
-WANDERING_FORCE = 0.0005
+# probability of leaving/not joining the site (a value between 0 and 1)
+WANDERING_FORCE = 0.1
 
 # Number of ticks to elapse before changing the state
-T_JOIN = 10
-T_LEAVE = 20
+T_JOIN = 1
+T_LEAVE = 4

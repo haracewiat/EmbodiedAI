@@ -1,4 +1,7 @@
 import pygame
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot
 import sys
 from experiments.flocking.flock import Flock
 from experiments.aggregation.aggregation import Aggregations
@@ -10,6 +13,9 @@ General simulation pipeline, suitable for all experiments
 
 class Simulation():
     def __init__(self, num_agents, screen_size, swarm_type, iterations):
+        # data
+        self.cockroaches = []
+
         # general settings
         self.screensize = screen_size
         self.screen = pygame.display.set_mode(screen_size)
@@ -34,7 +40,6 @@ class Simulation():
         self.to_display = pygame.sprite.Group()
         self.running = True
 
-
     def display(self):
         for sprite in self.to_display:
             sprite.display(self.screen)
@@ -57,9 +62,12 @@ class Simulation():
 
     def simulate(self):
         self.screen.fill(self.sim_background)
+        self.get_data()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+                self.print_data()
 
         self.update()
         self.display()
@@ -78,3 +86,16 @@ class Simulation():
             for i in range(self.iter):
                 self.simulate()
 
+    def get_data(self):
+        self.cockroaches.append(
+            [self.swarm.free-self.swarm.site1-self.swarm.site2, self.swarm.site1, self.swarm.site2])
+
+    def print_data(self):
+        data = np.array(self.cockroaches)
+
+        df = pd.DataFrame(data)
+        # df.to_csv('C:/Users/bhara/Downloads/data.csv')
+
+        # pyplot.plot(data)
+        # pyplot.show()
+        # print(data)

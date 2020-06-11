@@ -51,7 +51,11 @@ class Cockroach(Agent):
             pass
 
         elif self.state == State.JOINING:
+            # When in the JOINING state, don't leave the site before the time elapses
+            # TODO
+
             if bool(self.wait(p.T_JOIN)):
+                self.add_statistic(1)
                 self.state = State.STILL
 
         elif self.state == State.STILL:
@@ -59,8 +63,9 @@ class Cockroach(Agent):
 
         elif self.state == State.LEAVING:
             self.v = self.last_v
-            # if bool(self.wait(p.T_LEAVE)):
-            if self.site and not pygame.sprite.collide_mask(self, self.site):
+            # if self.site and not pygame.sprite.collide_mask(self, self.site):
+            if bool(self.wait(p.T_LEAVE)):
+                self.add_statistic(-1)
                 self.site = None
                 self.state = State.WANDERING
 
@@ -100,6 +105,14 @@ class Cockroach(Agent):
 
     def get_leave_probability(self, neighbours_count):
         return math.exp(-p.WANDERING_FORCE * neighbours_count)
+
+    def add_statistic(self, number):
+        if self.site.pos[0] == self.flock.mask1.area_loc[0]:
+            self.flock.site1 = self.flock.site1 + number
+        else:
+            self.flock.site2 = self.flock.site2 + number
+
+        self.flock.free - number
 
 
 class State(Enum):
