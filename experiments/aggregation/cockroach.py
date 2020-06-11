@@ -51,19 +51,21 @@ class Cockroach(Agent):
             pass
 
         elif self.state == State.JOINING:
-            # When in the JOINING state, don't leave the site before the time elapses
-            # TODO
-
-            if bool(self.wait(p.T_JOIN)):
+            collide = pygame.sprite.collide_mask(self, self.site)
+            if bool(self.wait(p.T_JOIN)) or not bool(collide):
                 self.add_statistic(1)
                 self.state = State.STILL
 
         elif self.state == State.STILL:
             self.v = [0, 0]
 
+            if bool(self.wait(p.D)):
+                if random.random() <= self.get_leave_probability():
+                    self.state = State.LEAVING
+
         elif self.state == State.LEAVING:
             self.v = self.last_v
-            # if self.site and not pygame.sprite.collide_mask(self, self.site):
+
             if bool(self.wait(p.T_LEAVE)):
                 self.add_statistic(-1)
                 self.site = None
@@ -78,19 +80,11 @@ class Cockroach(Agent):
         if self.site is None:
             return
 
-        # Count the neighbours in range
-        neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
-
         # if just ENTERED, then can stay in WANDERING or change into JOINING
         if self.state == State.WANDERING:
             self.last_v = self.v
-            if random.random() >= self.get_join_probability(neighbours_count):
+            if random.random() <= self.get_join_probability():
                 self.state = State.JOINING
-
-        # if already STILL, then can stay in STILL or change into LEAVING
-        elif self.state == State.STILL:
-            if random.random() >= self.get_leave_probability(neighbours_count):
-                self.state = State.LEAVING
 
     def wait(self, ticks):
         if self.ticks == ticks:
@@ -100,11 +94,17 @@ class Cockroach(Agent):
         self.ticks = self.ticks + 1
         return False
 
-    def get_join_probability(self, neighbours_count):
-        return (0.03 + (0.48 * (1 - math.exp(p.WANDERING_FORCE * neighbours_count))))
+    def get_join_probability(self):
+        neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
+        x = 1 / (1 + math.exp(-neighbours_count * p.P_JOIN))
+        # print(x)
+        return x
 
-    def get_leave_probability(self, neighbours_count):
-        return math.exp(-p.WANDERING_FORCE * neighbours_count)
+    def get_leave_probability(self):
+        neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
+        x = 1 / (1 + math.exp(neighbours_count * p.P_LEAVE))
+        print(x)
+        return x
 
     def add_statistic(self, number):
         if self.site.pos[0] == self.flock.mask1.area_loc[0]:

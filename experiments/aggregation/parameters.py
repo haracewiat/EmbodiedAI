@@ -63,8 +63,12 @@ COCROACH
 RADIUS_VIEW = 70
 
 # probability of leaving/not joining the site (a value between 0 and 1)
-WANDERING_FORCE = 0.1
+P_JOIN = 0.8
+P_LEAVE = 0.10
 
 # Number of ticks to elapse before changing the state
-T_JOIN = 1
-T_LEAVE = 4
+T_JOIN = 2
+T_LEAVE = 3
+
+# Frequency at which the cockroach might decide to leave (number of iterations)
+D = 50
