@@ -96,15 +96,11 @@ class Cockroach(Agent):
 
     def get_join_probability(self):
         neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
-        x = 1 / (1 + math.exp(-neighbours_count * p.P_JOIN))
-        # print(x)
-        return x
+        return 1 / (1 + math.exp(-neighbours_count * p.P_JOIN))
 
     def get_leave_probability(self):
         neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
-        x = 1 / (1 + math.exp(neighbours_count * p.P_LEAVE))
-        print(x)
-        return x
+        return 1 / (1 + math.exp(neighbours_count * p.P_LEAVE))
 
     def add_statistic(self, number):
         if self.site.pos[0] == self.flock.mask1.area_loc[0]:

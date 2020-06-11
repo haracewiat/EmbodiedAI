@@ -96,6 +96,6 @@ class Simulation():
         df = pd.DataFrame(data)
         # df.to_csv('C:/Users/bhara/Downloads/data.csv')
 
-        # pyplot.plot(data)
-        # pyplot.show()
-        # print(data)
+        pyplot.plot(data)
+        pyplot.show()
+        print(data)

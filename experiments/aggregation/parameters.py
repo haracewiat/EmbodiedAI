@@ -31,8 +31,8 @@ dT = 0.2
 # agents mass
 MASS = 20
 # agent maximum/minimum speed
-MAX_SPEED = 17.
-MIN_SPEED = 14.
+MAX_SPEED = 7.
+MIN_SPEED = 4.
 
 
 # Cocroach Settings:
@@ -63,12 +63,12 @@ COCROACH
 RADIUS_VIEW = 70
 
 # probability of leaving/not joining the site (a value between 0 and 1)
-P_JOIN = 0.8
-P_LEAVE = 0.10
+P_JOIN = 0.7
+P_LEAVE = 0.3
 
 # Number of ticks to elapse before changing the state
-T_JOIN = 2
-T_LEAVE = 3
+T_JOIN = 5
+T_LEAVE = 15
 
 # Frequency at which the cockroach might decide to leave (number of iterations)
-D = 50
+D = 30
