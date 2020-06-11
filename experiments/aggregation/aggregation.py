@@ -24,13 +24,13 @@ class Aggregations(Swarm):
         min_x, max_x = helperfunctions.area(object_loc[0], scale[0])
         min_y, max_y = helperfunctions.area(object_loc[1], scale[1])
 
-        # Add obstacle/-s to the environment if present
-        obstacles = p.EXPERIMENT
-        for obstacle in obstacles:
+        # Add site/-s
+        sites = p.EXPERIMENT
+        for site in sites:
             self.objects.add_object(
-                file=obstacle.img, pos=obstacle.area_loc, scale=obstacle.scale, type='site')
+                file=site.img, pos=site.area_loc, scale=site.scale, type='site')
 
-        # Add agents to the environment
+        # Add agents
         for agent in range(num_agents):
             coordinates = helperfunctions.generate_coordinates(self.screen)
 

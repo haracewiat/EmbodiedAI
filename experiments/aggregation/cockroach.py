@@ -1,4 +1,5 @@
 import pygame
+from enum import Enum
 import numpy as np
 from simulation import helperfunctions
 from simulation.agent import Agent
@@ -14,6 +15,10 @@ class Cockroach(Agent):
                                         dT=p.dT)
 
         self.flock = flock
+        self.site = None
+        self.state = State.WANDERING
+        self.ticks = 0
+        self.last_v = self.v
 
     # Describes how the agents interact with the aggregation sites and the constricted area
     def update_actions(self):
@@ -24,54 +29,84 @@ class Cockroach(Agent):
             if bool(collide):
                 self.avoid_obstacle(obstacle.pos, self.flock.object_loc)
 
-        align_force, cohesion_force, separate_force = self.neighbor_forces()
+        # Sense the entered sites
+        for site in self.flock.objects.sites:
+            entered = pygame.sprite.collide_mask(self, site)
+            if bool(entered):
+                self.site = site
 
-        # combine the vectors in one
-        steering_force = align_force * p.ALIGNMENT_WEIGHT + cohesion_force * \
-            p.COHESION_WEIGHT + separate_force * p.SEPARATION_WEIGHT
+        # Decide whether to join or leave a site if joined any
+        self.site_behavior()
 
-        # adjust the direction of the boid
-        self.steering += helperfunctions.truncate(
-            steering_force / self.mass, p.MAX_FORCE)
+        # Ack depending on the current state
+        self.change_state()
 
-    def neighbor_forces(self):
-
-        align_force, cohesion_force, separate_force = np.zeros(
-            2), np.zeros(2), np.zeros(2)
-
-        # find all the neighbors of a boid based on its radius view
-        neighbors = self.flock.find_neighbors(self, p.RADIUS_VIEW)
-
-        # if there are neighbors, estimate the influence of their forces
-        if neighbors:
-            align_force = self.align(
-                self.flock.find_neighbor_velocity(neighbors))
-            cohesion_force = self.cohesion(
-                self.flock.find_neighbor_center(neighbors))
-            separate_force = self.flock.find_neighbor_separation(
-                self, neighbors)
-
-        return align_force, cohesion_force, separate_force
-
-    def align(self, neighbor_force):
-        """
-        Function to align the agent in accordance to neighbor velocity
-        :param neighbor_force: np.array(x,y)
-        """
-        return helperfunctions.normalize(neighbor_force - self.v)
-
-    def cohesion(self, neighbor_center):
-        """
-        Function to move the agent towards the center of mass of its neighbors
-        :param neighbor_rotation: np.array(x,y)
-        """
-        force = neighbor_center - self.pos
-        return helperfunctions.normalize(force - self.v)
+        print("My speed: ", self.v)
 
     # Enables the modification of the cockroach state
+
     def change_state(self):
-        pass
+
+        print(self.state)
+
+        if self.state == State.WANDERING:
+            pass
+
+        elif self.state == State.JOINING:
+
+            if bool(self.wait(20)):
+                self.state = State.STILL
+
+        elif self.state == State.STILL:
+            self.v = [0, 0]
+
+        elif self.state == State.LEAVING:
+            self.v = self.last_v
+            if self.site and not pygame.sprite.collide_mask(self, self.site):
+                self.site = None
+                self.state = State.WANDERING
+            # if self.site and not pygame.sprite.collide_mask(self, self.site):
+            #     print("I don't collide anymore!")
+            #     self.site = None
+            #     self.state = State.WANDERING
+
+        else:
+            print('Invalid state: ', state)
 
     # Defines when the agent joins and leaves an aggregate
     def site_behavior(self):
+
+        if self.site is None:
+            return
+
+        probability = helperfunctions.randrange(0, 100)
+
+        # if just ENTERED, then can stay in WANDERING or change into JOINING
+        if self.state == State.WANDERING:
+            self.last_v = self.v
+            if probability >= p.WANDERING_FORCE:
+                self.state = State.JOINING
+
+        # if already STILL, then can stay in STILL or change into LEAVING
+        elif self.state == State.STILL:
+            print("I'm still ---------------------------")
+            if probability < p.WANDERING_FORCE:
+                self.state = State.LEAVING
+
+    def wandering(self):
         pass
+
+    def wait(self, ticks):
+        if self.ticks == ticks:
+            self.ticks = 0
+            return True
+
+        self.ticks = self.ticks + 1
+        return False
+
+
+class State(Enum):
+    WANDERING = 0
+    JOINING = 1
+    STILL = 2
+    LEAVING = 3
