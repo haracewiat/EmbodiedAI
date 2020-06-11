@@ -5,7 +5,7 @@ def experiment0(screensize):  # Single aggregation site
     sites = []
     sites.append(
         site([screensize[0] / 2., screensize[1] / 2.],
-             [int(p.S_WIDTH*0.11), int(p.S_HEIGHT*0.11)], True)
+             [int(p.S_WIDTH*0.11), int(p.S_HEIGHT*0.11)], False)
     )
 
     return sites

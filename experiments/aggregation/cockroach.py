@@ -1,9 +1,11 @@
 import pygame
+import math
 from enum import Enum
 import numpy as np
 from simulation import helperfunctions
 from simulation.agent import Agent
 from experiments.aggregation import parameters as p
+import random
 
 
 class Cockroach(Agent):
@@ -18,7 +20,7 @@ class Cockroach(Agent):
         self.site = None
         self.state = State.WANDERING
         self.ticks = 0
-        self.last_v = self.v
+        self.last_v = v
 
     # Describes how the agents interact with the aggregation sites and the constricted area
     def update_actions(self):
@@ -41,20 +43,15 @@ class Cockroach(Agent):
         # Ack depending on the current state
         self.change_state()
 
-        print("My speed: ", self.v)
-
     # Enables the modification of the cockroach state
 
     def change_state(self):
-
-        print(self.state)
 
         if self.state == State.WANDERING:
             pass
 
         elif self.state == State.JOINING:
-
-            if bool(self.wait(20)):
+            if bool(self.wait(p.T_JOIN)):
                 self.state = State.STILL
 
         elif self.state == State.STILL:
@@ -62,13 +59,10 @@ class Cockroach(Agent):
 
         elif self.state == State.LEAVING:
             self.v = self.last_v
+            # if bool(self.wait(p.T_LEAVE)):
             if self.site and not pygame.sprite.collide_mask(self, self.site):
                 self.site = None
                 self.state = State.WANDERING
-            # if self.site and not pygame.sprite.collide_mask(self, self.site):
-            #     print("I don't collide anymore!")
-            #     self.site = None
-            #     self.state = State.WANDERING
 
         else:
             print('Invalid state: ', state)
@@ -79,22 +73,19 @@ class Cockroach(Agent):
         if self.site is None:
             return
 
-        probability = helperfunctions.randrange(0, 100)
+        # Count the neighbours in range
+        neighbours_count = len(self.flock.find_neighbors(self, p.RADIUS_VIEW))
 
         # if just ENTERED, then can stay in WANDERING or change into JOINING
         if self.state == State.WANDERING:
             self.last_v = self.v
-            if probability >= p.WANDERING_FORCE:
+            if random.random() >= self.get_join_probability(neighbours_count):
                 self.state = State.JOINING
 
         # if already STILL, then can stay in STILL or change into LEAVING
         elif self.state == State.STILL:
-            print("I'm still ---------------------------")
-            if probability < p.WANDERING_FORCE:
+            if random.random() >= self.get_leave_probability(neighbours_count):
                 self.state = State.LEAVING
-
-    def wandering(self):
-        pass
 
     def wait(self, ticks):
         if self.ticks == ticks:
@@ -103,6 +94,12 @@ class Cockroach(Agent):
 
         self.ticks = self.ticks + 1
         return False
+
+    def get_join_probability(self, neighbours_count):
+        return (0.03 + (0.48 * (1 - math.exp(p.WANDERING_FORCE * neighbours_count))))
+
+    def get_leave_probability(self, neighbours_count):
+        return math.exp(-p.WANDERING_FORCE * neighbours_count)
 
 
 class State(Enum):

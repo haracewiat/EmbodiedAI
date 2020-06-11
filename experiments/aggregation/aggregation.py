@@ -42,25 +42,5 @@ class Aggregations(Swarm):
             self.add_agent(
                 Cockroach(pos=np.array(coordinates), v=None, flock=swarm))
 
-    def find_neighbor_velocity(self, neighbors):
-        neighbor_sum_v = np.zeros(2)
-        for idx in neighbors:
-            neighbor_sum_v += list(self.agents)[idx].v
-        return neighbor_sum_v/len(neighbors)
-
-    def find_neighbor_center(self, neighbors):
-        neighbor_sum_pos = np.zeros(2)
-        for idx in neighbors:
-            neighbor_sum_pos += list(self.agents)[idx].pos
-        return neighbor_sum_pos/len(neighbors)
-
-    def find_neighbor_separation(self, boid, neighbors):  # show what works better
-        separate = np.zeros(2)
-        for idx in neighbors:
-            neighbor_pos = list(self.agents)[idx].pos
-            # compute the distance vector (v_x, v_y)
-            difference = boid.pos - neighbor_pos
-            # normalize to unit vector with respect to its maginiture
-            difference /= helperfunctions.norm(difference)
-            separate += difference  # add the influences of all neighbors up
-        return separate/len(neighbors)
+    def count_neighbours(self, neighbors):
+        return len(neighbors)

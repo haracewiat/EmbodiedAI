@@ -5,7 +5,7 @@ from experiments.aggregation import experiments as e
 GLOBAL SETTING (DO NOT CHANGE)
 """
 # screen settings
-S_WIDTH, S_HEIGHT = 500, 500
+S_WIDTH, S_HEIGHT = 800, 800
 SCREEN = (S_WIDTH, S_HEIGHT)
 
 # choose how long to run the simulation
@@ -15,7 +15,7 @@ FRAMES = -1
 # choose swarm type
 SWARM = 'Aggregation'
 # define the number of agents
-N_AGENTS = 10
+N_AGENTS = 20
 # object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = False
@@ -31,8 +31,8 @@ dT = 0.2
 # agents mass
 MASS = 20
 # agent maximum/minimum speed
-MAX_SPEED = 7.
-MIN_SPEED = 4.
+MAX_SPEED = 17.
+MIN_SPEED = 14.
 
 
 # Cocroach Settings:
@@ -51,7 +51,7 @@ OBSTACLES = True
 OUTSIDE = False
 
 # choose experiment
-EXPERIMENT = e.experiment0(SCREEN)
+EXPERIMENT = e.experiment1(SCREEN)
 
 
 """
@@ -62,10 +62,9 @@ COCROACH
 # RADIUS_VIEW = int(S_HEIGHT*S_WIDTH*0.000001*70) Make it with respect to the screen size
 RADIUS_VIEW = 70
 
-# weights for velocity forces
-COHESION_WEIGHT = 5.
-ALIGNMENT_WEIGHT = 15.
-SEPARATION_WEIGHT = 5.
+# probability of leaving the site (a value between 0 and 1)
+WANDERING_FORCE = 0.0005
 
-# probability of leaving the site (a value between  and 100)
-WANDERING_FORCE = 5.
+# Number of ticks to elapse before changing the state
+T_JOIN = 10
+T_LEAVE = 20
