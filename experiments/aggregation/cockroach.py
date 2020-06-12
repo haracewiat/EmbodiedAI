@@ -21,6 +21,7 @@ class Cockroach(Agent):
         self.state = State.WANDERING
         self.ticks = 0
         self.last_v = v
+        self.T_DIRECTION = random.randint(50, 150)
 
     # Describes how the agents interact with the aggregation sites and the constricted area
     def update_actions(self):
@@ -48,7 +49,10 @@ class Cockroach(Agent):
     def change_state(self):
 
         if self.state == State.WANDERING:
-            pass
+
+            # Comment this out if you want the cockroaches to maintain direction
+            if bool(self.wait(self.T_DIRECTION)):
+                self.v = self.set_velocity()
 
         elif self.state == State.JOINING:
             collide = pygame.sprite.collide_mask(self, self.site)
@@ -69,6 +73,7 @@ class Cockroach(Agent):
             if bool(self.wait(p.T_LEAVE)):
                 self.add_statistic(-1)
                 self.site = None
+                self.T_DIRECTION = random.randint(50, 150)
                 self.state = State.WANDERING
 
         else:
@@ -84,6 +89,7 @@ class Cockroach(Agent):
         if self.state == State.WANDERING:
             self.last_v = self.v
             if random.random() <= self.get_join_probability():
+                self.ticks = 0
                 self.state = State.JOINING
 
     def wait(self, ticks):
@@ -103,6 +109,9 @@ class Cockroach(Agent):
         return 1 / (1 + math.exp(neighbours_count * p.P_LEAVE))
 
     def add_statistic(self, number):
+        if self.site is None:
+            return
+
         if self.site.pos[0] == self.flock.mask1.area_loc[0]:
             self.flock.site1 = self.flock.site1 + number
         else:
