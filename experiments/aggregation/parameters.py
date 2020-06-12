@@ -51,7 +51,7 @@ OBSTACLES = True
 OUTSIDE = False
 
 # choose experiment
-EXPERIMENT = e.experiment1(SCREEN)
+EXPERIMENT = e.experiment3(SCREEN)
 
 
 """
@@ -71,4 +71,4 @@ T_JOIN = 5
 T_LEAVE = 15
 
 # Frequency at which the cockroach might decide to leave (number of iterations)
-D = 30
+D = 15
