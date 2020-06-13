@@ -51,7 +51,7 @@ def plusminus():
 
 def rotate(vector):
     new_vector=np.zeros(2)
-    theta=np.deg2rad(random.randint(120,180))
+    theta=np.deg2rad(random.randint(150,210))
     cs = np.cos(theta)
     sn = np.sin(theta)
     new_vector[0] = vector[0] *cs - vector[1]*sn
@@ -90,6 +90,9 @@ def norm(vector):
 def speedvector(max_speed):
     return [random.randrange(1,max_speed*2+1)*plusminus(), random.randrange(1,max_speed*2+1)*plusminus()]
 
+
+def relative(u,v):
+    return [int(u[i]) - int(v[i]) for i in range(len(u))]
 
 
 

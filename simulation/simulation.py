@@ -1,6 +1,9 @@
 import pygame
 import sys
+import matplotlib.pyplot as plt
 from experiments.flocking.flock import Flock
+from experiments.aggregation.aggregation import Aggregations
+from experiments.covid.population import Population
 
 """
 General simulation pipeline, suitable for all experiments 
@@ -33,6 +36,35 @@ class Simulation():
         self.to_update = pygame.sprite.Group()
         self.to_display = pygame.sprite.Group()
         self.running = True
+
+    def CovidPlot(self, data):
+        output_name = "experiments/covid/plots/Covid-19-SIR%s.png" % time.strftime("-%m.%d.%y-%H:%M", time.localtime())
+        fig = plt.figure()
+        plt.plot(data['S'], label="Susceptible", color=(1,0.5,0)) #Orange
+        plt.plot(data['I'], label="Infected", color=(1,0,0)) #Red
+        plt.plot(data['R'], label="Recovered", color=(0, 1, 0)) #Green
+        plt.title("Covid-19 Simulation S-I-R")
+        plt.xlabel("Time")
+        plt.ylabel("Population")
+        plt.legend()
+        fig.savefig(output_name)
+        plt.show()
+
+    def FlockPlot(self):
+        pass
+
+    def AggregationPlot(self):
+        pass
+
+    def plot_simulation(self):
+        if self.swarm_type == 'Covid':
+            self.CovidPlot(self.swarm.points_to_plot)
+
+        elif self.swarm_type == 'Flock':
+            self.FlockPlot()
+
+        elif self.swarm_type == 'Aggregation':
+            self.AggregationPlot()
 
 
 
@@ -72,14 +104,20 @@ class Simulation():
     def run(self):
         #initialize the environment and agent/obstacle positions
         self.initialize()
-
         #the simulation loop, infinite until the user exists the simulation
         #finite time parameter or infinite
         if self.iter == -1:
             while self.running:
                 self.simulate()
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        # The event is pushing the x button, not ctrl-c.
+                        self.running = False
+                        self.plot_simulation()
         else:
             for i in range(self.iter):
                 self.simulate()
+            self.plot_simulation()
+
 
 
