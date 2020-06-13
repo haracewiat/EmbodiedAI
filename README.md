@@ -28,8 +28,10 @@ About Experiment 2:
 ## Examples Assignment 2:
 
 SIR model:
+
 ![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment2/covid.gif)
 
 Simplified lockdown:
+
 ![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment2/covid1.gif)
 
