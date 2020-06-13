@@ -5,8 +5,7 @@ This repository contains the practical materials for the Embodied Artificial Int
 To run the code simply execute the main.py file. For more detailed overview of the code structure and functionality, please see the supplementary document 'CodeTutorial'.
 
 
-## Examples 
-Here are some flocking examples for the 1st Assignment:
+## Examples Assignment 1: 
 
 About Stage 1:
 
@@ -23,3 +22,16 @@ About Experiment 2:
 
 
 ![alt text](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment1/demo_pt2.png?raw=true)
+
+
+
+## Examples Assignment 2:
+
+SIR model:
+
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment2/covid.gif)
+
+Simplified lockdown:
+
+![Output sample](https://github.com/IlzeAmandaA/EmbodiedAI/blob/master/gifs/Assignment2/covid1.gif)
+
