@@ -21,8 +21,8 @@ class Swarm(pygame.sprite.Sprite):
         self.objects = Objects()
         self.points_to_plot = {'S': [], 'I': [], 'R': []}
         self.datapoints = []
-        self.data = {State.SUSCEPTIBLE: p.N_AGENTS,
-                     State.RECOVERED: 0, State.INFECTIOUS: 0}
+        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0,
+                     State.SUSCEPTIBLE: p.N_AGENTS}
 
     def add_agent(self, agent):
         self.agents.add(agent)
@@ -36,7 +36,7 @@ class Swarm(pygame.sprite.Sprite):
             else:
                 if helperfunctions.dist(agent.pos, neighbor.pos) < radius:
 
-                    if neighbor.state == State.SUSCEPTIBLE and random.random() < 0.5:
+                    if neighbor.state == State.SUSCEPTIBLE and random.random() < 0.1:
                         neighbor.change_state(State.INFECTIOUS, self.swarm)
 
                     neighbors.append(j)

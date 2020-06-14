@@ -21,7 +21,7 @@ class Person(Agent):
         self.type = 'S'
 
         # Initialize the new person to infectious with 10% of chance
-        if random.random() <= 0.1:
+        if random.random() <= 0.05:
             self.change_state(State.INFECTIOUS, self.swarm)
 
     def update_actions(self):

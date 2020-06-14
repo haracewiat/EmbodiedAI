@@ -4,6 +4,7 @@ from itertools import count
 from simulation import config
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from experiments.covid import parameters as p
 from simulation.agent import State
 import numpy as np
 import pandas as pd
@@ -18,11 +19,28 @@ class LivePlot():
     def __init__(self):
         plt.style.use('fivethirtyeight')
 
+        # Get initial information
+        self.data = pd.read_csv('data.csv')
+        self.labels = []
+        colors_array = []
+
+        for i, key in enumerate(self.data):
+            if i != 0:
+                # Create labels
+                self.labels.append(key.replace(
+                    'State.', '').lower().capitalize())
+
+                # Create colors
+                colors_array.append(
+                    config.COLORS["N_{}".format(key.replace('State.', ''))])
+
+        self.colors = tuple(colors_array)
+
         x = []
         y = []
         index = count()
-        self.running = True
 
+        self.running = True
         self.run()
 
     def run(self):
@@ -40,30 +58,45 @@ class LivePlot():
             data_points = []
             x = []
 
-            # plt.plot(x, y1, label="Channel 1")
-            # plt.plot(x, y2, label="Channel 1")
-
             for i, key in enumerate(data):
                 if i == 0:
                     x = data[key]
                 else:
-                    variable = "y{0}".format(i)
-                    variable = data[key]
-                    data_points.append(variable)
+                    data_points.append(data[key])
 
             plt.cla()
 
-            for i in range(0, len(data_points)):
-                color_name = "N_{}".format(
-                    data_points[i].name.replace('State.', ''))
-                plt.stackplot(
-                    x, data_points[i], color=config.COLORS[color_name])
+            # for i in range(0, len(data_points)):
+            #     color_name = "N_{}".format(
+            #         data_points[i].name.replace('State.', ''))
+            #     plt.stackplot(
+            #         x, data_points[i], color=config.COLORS[color_name])
+
+            plt.stackplot(x, data_points, labels=self.labels,
+                          colors=self.colors)
 
             # Adjust the legend manually!
-            plt.legend(labels=['Susceptible', 'Recovered', 'Infected'])
+            plt.legend()
 
         else:
             plt.close('all')
+
+    def get_labels(self, data_points):
+        labels = []
+
+        for i in range(0, len(data_points)):
+            labels.append(data_points[i].name.replace('State.', ''))
+
+        return labels
+
+    def get_colors(self, data_points):
+        colors = []
+
+        for i in range(0, len(data_points)):
+            colors.append("N_{}".format(
+                data_points[i].name.replace('State.', '')))
+
+        return colors
 
 
 class Data():
@@ -81,13 +114,20 @@ class Data():
             csv_writer = csv.DictWriter(csv_file, fieldnames=self.field_names)
             csv_writer.writeheader()
 
-    def add_entry(self, data):
+    def add_entry(self, original_data):
+
+        # Update data
+        data = original_data.copy()
+        data.update({'x_value': self.x_value})
+        data.update(data)
+
+        # Change values to percentage
+        for key in data:
+            if key != "x_value":
+                data[key] = (data[key] / p.N_AGENTS) * p.N_AGENTS
+
         with open('data.csv', 'a', newline='') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=self.field_names)
-
-            data.update({'x_value': self.x_value})
-            data.update(data)
-
             csv_writer.writerow(data)
 
-            self.x_value += 1
+        self.x_value += 1

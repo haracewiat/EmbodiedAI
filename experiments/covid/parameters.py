@@ -6,7 +6,7 @@ Parameter settings for covid experiment
 General settings (DO NOT CHANGE)
 """
 # screen settings
-S_WIDTH, S_HEIGHT = 800, 800
+S_WIDTH, S_HEIGHT = 500, 500
 SCREEN = (S_WIDTH, S_HEIGHT)
 TRACK_DATA = True
 
@@ -22,7 +22,7 @@ N_AGENTS = 40
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = True
 # time setting
-DAY = 400
+DAY = 200
 
 
 # Agent Settings:

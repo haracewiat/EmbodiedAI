@@ -131,6 +131,8 @@ class Agent(pygame.sprite.Sprite):  # super class
             # Update data
             if self.state == State.RECOVERED:
                 swarm.data[State.INFECTIOUS] -= 1
+            elif self.state == State.INFECTIOUS:
+                swarm.data[State.SUSCEPTIBLE] -= 1
             # swarm.data[State[self.state] - 1] -= 1
             swarm.data[self.state] += 1
 
