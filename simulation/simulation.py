@@ -1,25 +1,34 @@
+import threading
+import pandas as pd
+import numpy as np
+from simulation import config
+import time
+from simulation.plot import LivePlot
+from simulation.plot import Data
+from simulation.agent import State
+from experiments.covid.population import Population
+from experiments.aggregation.aggregation import Aggregations
+from experiments.covid import parameters as p
+from experiments.flocking.flock import Flock
+import matplotlib.pyplot as plt
 import pygame
 import sys
-import matplotlib.pyplot as plt
-from experiments.flocking.flock import Flock
-from experiments.aggregation.aggregation import Aggregations
-from experiments.covid.population import Population
 
 """
-General simulation pipeline, suitable for all experiments 
+General simulation pipeline, suitable for all experiments
 """
+
 
 class Simulation():
     def __init__(self, num_agents, screen_size, swarm_type, iterations):
-
-
-        #general settings
+        # general settings
         self.screensize = screen_size
         self.screen = pygame.display.set_mode(screen_size)
         self.sim_background = pygame.Color('gray21')
         self.iter = iterations
+        self.swarm_type = swarm_type
 
-        #swarm settings
+        # swarm settings
         self.num_agents = num_agents
         if swarm_type == 'Flock':
             self.swarm = Flock(screen_size)
@@ -32,17 +41,28 @@ class Simulation():
             print('None of the possible swarms selected')
             sys.exit()
 
-        #update
+        # Create data storage
+        self.data = self.swarm.data
+        self.data_storage = Data(self.data)
+        self.data_storage.initialize()
+
+        # Spawn the live plot
+        self.plot = threading.Thread(target=LivePlot)
+        self.plot.setDaemon(True)
+        self.plot.start()
+
+        # update
         self.to_update = pygame.sprite.Group()
         self.to_display = pygame.sprite.Group()
         self.running = True
 
     def CovidPlot(self, data):
-        output_name = "experiments/covid/plots/Covid-19-SIR%s.png" % time.strftime("-%m.%d.%y-%H:%M", time.localtime())
+        output_name = "experiments/covid/plots/Covid-19-SIR%s.png" % time.strftime(
+            "-%m.%d.%y-%H:%M", time.localtime())
         fig = plt.figure()
-        plt.plot(data['S'], label="Susceptible", color=(1,0.5,0)) #Orange
-        plt.plot(data['I'], label="Infected", color=(1,0,0)) #Red
-        plt.plot(data['R'], label="Recovered", color=(0, 1, 0)) #Green
+        plt.plot(data['S'], label="Susceptible", color=(1, 0.5, 0))  # Orange
+        plt.plot(data['I'], label="Infected", color=(1, 0, 0))  # Red
+        plt.plot(data['R'], label="Recovered", color=(0, 1, 0))  # Green
         plt.title("Covid-19 Simulation S-I-R")
         plt.xlabel("Time")
         plt.ylabel("Population")
@@ -66,8 +86,6 @@ class Simulation():
         elif self.swarm_type == 'Aggregation':
             self.AggregationPlot()
 
-
-
     def display(self):
         for sprite in self.to_display:
             sprite.display(self.screen)
@@ -75,49 +93,53 @@ class Simulation():
     def update(self):
         self.to_update.update()
 
-
     def initialize(self):
 
-        #initialize a swarm type specific environment
+        # initialize a swarm type specific environment
         self.swarm.initialize(self.num_agents, self.swarm)
 
-        #add all agents/objects to the update
+        # add all agents/objects to the update
         self.to_update = pygame.sprite.Group(self.swarm)
 
-        #add all agents/objects to display
+        # add all agents/objects to display
         self.to_display = pygame.sprite.Group(
             self.to_update
         )
 
     def simulate(self):
+
+        # Store data on every iteration
+        self.data_storage.add_entry(self.swarm.data)
+
         self.screen.fill(self.sim_background)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # config.terminate_threads = True
+                # self.plot.join()
                 self.running = False
 
         self.update()
         self.display()
         pygame.display.flip()
 
-
+        # self.plot.run()
 
     def run(self):
-        #initialize the environment and agent/obstacle positions
+        # initialize the environment and agent/obstacle positions
         self.initialize()
-        #the simulation loop, infinite until the user exists the simulation
-        #finite time parameter or infinite
+        # the simulation loop, infinite until the user exists the simulation
+        # finite time parameter or infinite
         if self.iter == -1:
             while self.running:
                 self.simulate()
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         # The event is pushing the x button, not ctrl-c.
+                        # config.terminate_threads = True
+                        # self.plot.join()
                         self.running = False
-                        self.plot_simulation()
+                        # self.plot_simulation()
         else:
             for i in range(self.iter):
                 self.simulate()
             self.plot_simulation()
-
-
-
