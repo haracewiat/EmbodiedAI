@@ -76,27 +76,10 @@ class LivePlot():
                           colors=self.colors)
 
             # Adjust the legend manually!
-            plt.legend()
+            plt.legend(loc='upper left')
 
         else:
             plt.close('all')
-
-    def get_labels(self, data_points):
-        labels = []
-
-        for i in range(0, len(data_points)):
-            labels.append(data_points[i].name.replace('State.', ''))
-
-        return labels
-
-    def get_colors(self, data_points):
-        colors = []
-
-        for i in range(0, len(data_points)):
-            colors.append("N_{}".format(
-                data_points[i].name.replace('State.', '')))
-
-        return colors
 
 
 class Data():

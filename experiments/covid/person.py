@@ -18,11 +18,13 @@ class Person(Agent):
 
         self.swarm = population
         self.time = 0
+        self.recovery_time = random.randint(
+            p.INFECTION_TIME-p.MARGIN, p.INFECTION_TIME + p.MARGIN)
         self.type = 'S'
 
-        # Initialize the new person to infectious with 10% of chance
-        if random.random() <= 0.05:
-            self.change_state(State.INFECTIOUS, self.swarm)
+        # Initialize the new person to infectious with 20% of chance
+        # if random.random() <= 0.2:
+        #     self.change_state(State.INFECTIOUS, self.swarm)
 
     def update_actions(self):
 
@@ -38,7 +40,7 @@ class Person(Agent):
 
     def recover(self):
         if self.state == State.INFECTIOUS:
-            if self.time >= p.DAY:
+            if self.time >= self.recovery_time:
                 self.change_state(State.RECOVERED, self.swarm)
                 self.time = 0
             else:

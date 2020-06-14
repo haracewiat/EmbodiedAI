@@ -36,7 +36,7 @@ class Swarm(pygame.sprite.Sprite):
             else:
                 if helperfunctions.dist(agent.pos, neighbor.pos) < radius:
 
-                    if neighbor.state == State.SUSCEPTIBLE and random.random() < 0.1:
+                    if neighbor.state == State.SUSCEPTIBLE and random.random() <= p.INFECTION_RATE:
                         neighbor.change_state(State.INFECTIOUS, self.swarm)
 
                     neighbors.append(j)

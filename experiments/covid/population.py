@@ -52,8 +52,13 @@ class Population(Swarm):
             #         while coordinates[0]>=max_x or coordinates[0]<=min_x or coordinates[1]>=max_y or coordinates[1]<=min_y:
             #             coordinates = helperfunctions.generate_coordinates(self.screen)
 
-            self.add_agent(Person(pos=np.array(coordinates),
-                                  v=None, population=self.swarm))
+            person = Person(pos=np.array(coordinates),
+                            v=None, population=self.swarm)
+            # Infect initial number of people
+            if agent < p.INITIAL_INFECTED:
+                person.change_state(State.INFECTIOUS, self.swarm)
+
+            self.add_agent(person)
 
     def spread_infection(self, agent, radius):
         super().infect_neighbors(agent, radius, p.INFECTION_RATE)
