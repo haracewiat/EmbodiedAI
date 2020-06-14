@@ -41,15 +41,16 @@ class Simulation():
             print('None of the possible swarms selected')
             sys.exit()
 
-        # Create data storage
-        self.data = self.swarm.data
-        self.data_storage = Data(self.data)
-        self.data_storage.initialize()
+        if bool(p.TRACK_DATA):
+            # Create data storage
+            self.data = self.swarm.data
+            self.data_storage = Data(self.data)
+            self.data_storage.initialize()
 
-        # Spawn the live plot
-        self.plot = threading.Thread(target=LivePlot)
-        self.plot.setDaemon(True)
-        self.plot.start()
+            # Spawn the live plot
+            self.plot = threading.Thread(target=LivePlot)
+            self.plot.setDaemon(True)
+            self.plot.start()
 
         # update
         self.to_update = pygame.sprite.Group()
@@ -109,7 +110,8 @@ class Simulation():
     def simulate(self):
 
         # Store data on every iteration
-        self.data_storage.add_entry(self.swarm.data)
+        if bool(p.TRACK_DATA):
+            self.data_storage.add_entry(self.swarm.data)
 
         self.screen.fill(self.sim_background)
         for event in pygame.event.get():
@@ -121,8 +123,6 @@ class Simulation():
         self.update()
         self.display()
         pygame.display.flip()
-
-        # self.plot.run()
 
     def run(self):
         # initialize the environment and agent/obstacle positions
@@ -142,4 +142,4 @@ class Simulation():
         else:
             for i in range(self.iter):
                 self.simulate()
-            self.plot_simulation()
+            # self.plot_simulation()

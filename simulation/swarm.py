@@ -3,6 +3,7 @@ from simulation import helperfunctions
 from simulation.objects import Objects
 from simulation.agent import State
 from experiments.covid import parameters as p
+import random
 
 """
 General swarm class that defines general swarm properties, which are common across different swarm types
@@ -26,23 +27,29 @@ class Swarm(pygame.sprite.Sprite):
     def add_agent(self, agent):
         self.agents.add(agent)
 
-    def find_neighbors(self, agent, radius):
+    def infect_neighbors(self, agent, radius, infection_rate):
         agents = list(self.agents).copy()
         neighbors = []
         for j, neighbor in enumerate(agents):
             if agent == neighbor:
                 continue
             else:
-                try:
-                    type = neighbor.type
-                except:
-                    type = None
+                if helperfunctions.dist(agent.pos, neighbor.pos) < radius:
 
-            if type != None:
-                if type == 'I' and helperfunctions.dist(agent.pos, neighbor.pos) < radius:
+                    if neighbor.state == State.SUSCEPTIBLE and random.random() < 0.5:
+                        neighbor.change_state(State.INFECTIOUS, self.swarm)
+
                     neighbors.append(j)
-            elif helperfunctions.dist(agent.pos, neighbor.pos) < radius:
-                neighbors.append(j)
+            #     try:
+            #         type = neighbor.type
+            #     except:
+            #         type = None
+
+            # if type != None:
+            #     if type == 'I' and helperfunctions.dist(agent.pos, neighbor.pos) < radius:
+            #         neighbors.append(j)
+            # elif helperfunctions.dist(agent.pos, neighbor.pos) < radius:
+            #     neighbors.append(j)
 
         return neighbors
 

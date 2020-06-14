@@ -3,6 +3,8 @@ from simulation.swarm import Swarm
 from simulation import helperfunctions
 from experiments.covid.person import Person
 from experiments.covid import parameters as p
+import random
+from simulation.agent import State
 
 
 class Population(Swarm):
@@ -53,25 +55,5 @@ class Population(Swarm):
             self.add_agent(Person(pos=np.array(coordinates),
                                   v=None, population=self.swarm))
 
-    def find_neighbor_velocity(self, neighbors):
-        neighbor_sum_v = np.zeros(2)
-        for idx in neighbors:
-            neighbor_sum_v += list(self.agents)[idx].v
-        return neighbor_sum_v/len(neighbors)
-
-    def find_neighbor_center(self, neighbors):
-        neighbor_sum_pos = np.zeros(2)
-        for idx in neighbors:
-            neighbor_sum_pos += list(self.agents)[idx].pos
-        return neighbor_sum_pos/len(neighbors)
-
-    def find_neighbor_separation(self, boid, neighbors):  # show what works better
-        separate = np.zeros(2)
-        for idx in neighbors:
-            neighbor_pos = list(self.agents)[idx].pos
-            # compute the distance vector (v_x, v_y)
-            difference = boid.pos - neighbor_pos
-            # normalize to unit vector with respect to its maginiture
-            difference /= helperfunctions.norm(difference)
-            separate += difference  # add the influences of all neighbors up
-        return separate/len(neighbors)
+    def spread_infection(self, agent, radius):
+        super().infect_neighbors(agent, radius, p.INFECTION_RATE)

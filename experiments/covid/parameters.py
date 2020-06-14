@@ -6,8 +6,9 @@ Parameter settings for covid experiment
 General settings (DO NOT CHANGE)
 """
 # screen settings
-S_WIDTH, S_HEIGHT = 400, 400
+S_WIDTH, S_HEIGHT = 800, 800
 SCREEN = (S_WIDTH, S_HEIGHT)
+TRACK_DATA = True
 
 # choose how long to run the simulation
 # -1 : infinite, N: finite
@@ -20,19 +21,21 @@ N_AGENTS = 40
 # object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = True
+# time setting
+DAY = 400
 
 
 # Agent Settings:
 # agent size
-WIDTH = 10*2
+WIDTH = 10
 HEIGHT = WIDTH
 # update
 dT = 0.2
 # agents mass
 MASS = 20
 # agent maximum/minimum speed
-MAX_SPEED = 7.
-MIN_SPEED = 4.
+MAX_SPEED = 5.
+MIN_SPEED = 2.
 
 
 # Boid Settings:
@@ -57,7 +60,4 @@ Person class parameters
 """
 # view of neighbor agents
 RADIUS_VIEW = 70
-# weights for velocity forces
-COHESION_WEIGHT = 0.
-ALIGNMENT_WEIGHT = 0.
-SEPARATION_WEIGHT = 0.
+INFECTION_RATE = 0

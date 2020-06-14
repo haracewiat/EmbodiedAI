@@ -62,7 +62,6 @@ class LivePlot():
             # Adjust the legend manually!
             plt.legend(labels=['Susceptible', 'Recovered', 'Infected'])
 
-            plt.tight_layout()
         else:
             plt.close('all')
 

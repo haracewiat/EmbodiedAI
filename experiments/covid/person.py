@@ -16,53 +16,30 @@ class Person(Agent):
                                      color=config.SUSCEPTIBLE, mass=p.MASS, width=p.WIDTH, height=p.HEIGHT,
                                      dT=p.dT)
 
-        self.population = population
+        self.swarm = population
+        self.time = 0
         self.type = 'S'
+
+        # Initialize the new person to infectious with 10% of chance
+        if random.random() <= 0.1:
+            self.change_state(State.INFECTIOUS, self.swarm)
 
     def update_actions(self):
 
-        # self.population.datapoints = ['I'] if random.random() > 0.5 else ['R']
+        # If infected, spread the infection
+        self.infect()
 
-        self.update_state()
+        # If infected, recover after a given period
+        self.recover()
 
-    def neighbor_forces(self):
+    def infect(self):
+        if self.state == State.INFECTIOUS:
+            self.swarm.spread_infection(self, p.RADIUS_VIEW)
 
-        align_force, cohesion_force, separate_force = np.zeros(
-            2), np.zeros(2), np.zeros(2)
-
-        # find all the neighbors of a boid based on its radius view
-        neighbors = self.population.find_neighbors(self, p.RADIUS_VIEW)
-
-        # if there are neighbors, estimate the influence of their forces
-        if neighbors:
-            align_force = self.align(
-                self.population.find_neighbor_velocity(neighbors))
-            cohesion_force = self.cohesion(
-                self.population.find_neighbor_center(neighbors))
-            separate_force = self.population.find_neighbor_separation(
-                self, neighbors)
-
-        return align_force, cohesion_force, separate_force
-
-    def align(self, neighbor_force):
-        """
-        Function to align the agent in accordance to neighbor velocity
-        :param neighbor_force: np.array(x,y)
-        """
-        return helperfunctions.normalize(neighbor_force - self.v)
-
-    def cohesion(self, neighbor_center):
-        """
-        Function to move the agent towards the center of mass of its neighbors
-        :param neighbor_rotation: np.array(x,y)
-        """
-        force = neighbor_center - self.pos
-        return helperfunctions.normalize(force - self.v)
-
-    def update_state(self):
-        if self.state == State.SUSCEPTIBLE:
-            if random.random() < 0.005:
-                self.change_state(State.INFECTIOUS, self.population)
-        elif self.state == State.INFECTIOUS:
-            if random.random() < 0.005:
-                self.change_state(State.RECOVERED, self.population)
+    def recover(self):
+        if self.state == State.INFECTIOUS:
+            if self.time >= p.DAY:
+                self.change_state(State.RECOVERED, self.swarm)
+                self.time = 0
+            else:
+                self.time += 1
