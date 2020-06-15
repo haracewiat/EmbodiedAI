@@ -36,16 +36,13 @@ class LivePlot():
 
         self.colors = tuple(colors_array)
 
-        x = []
-        y = []
-        index = count()
-
         self.running = True
         self.run()
 
     def run(self):
         if not bool(config.terminate_threads):
-            ani = FuncAnimation(plt.gcf(), self.animate, interval=500)
+            animation = FuncAnimation(
+                plt.gcf(), self.animate, interval=p.INTERVAL)
             plt.tight_layout()
             plt.show()
 
@@ -66,16 +63,9 @@ class LivePlot():
 
             plt.cla()
 
-            # for i in range(0, len(data_points)):
-            #     color_name = "N_{}".format(
-            #         data_points[i].name.replace('State.', ''))
-            #     plt.stackplot(
-            #         x, data_points[i], color=config.COLORS[color_name])
-
             plt.stackplot(x, data_points, labels=self.labels,
                           colors=self.colors)
 
-            # Adjust the legend manually!
             plt.legend(loc='upper left')
 
         else:
@@ -111,7 +101,6 @@ class Data():
 
         with open('data.csv', 'a', newline='') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=self.field_names)
-            # Only if data if different to previous row?
             csv_writer.writerow(data)
 
         self.x_value += 1

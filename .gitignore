@@ -1,3 +1,4 @@
 #untrack folders
 .idea/
 __pycache__
+*.csv

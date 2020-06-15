@@ -17,31 +17,40 @@ class Swarm(pygame.sprite.Sprite):
     def __init__(self, screen_size, plot=None):
         super(Swarm, self).__init__()
 
+        # General
+        self.screen = screen_size
+
+        # Agents storage
         self.partitions = self.create_partitions()
         self.agents = pygame.sprite.Group()
-        self.screen = screen_size
+
+        # Environment
         self.objects = Objects()
+
+        # Virus spread data
         self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0,
                      State.SUSCEPTIBLE: p.N_AGENTS}
 
     def add_agent(self, agent):
+
+        # Store a full list of all agents
+        self.agents.add(agent)
+
         # Assign the agent to the right partition based on its position
         if p.USE_PARTITIONS:
             agent.partition_key = self.find_partition_key(agent)
             self.partitions[agent.partition_key].add(agent)
 
-        # Store a full list of all agents
-        self.agents.add(agent)
-
     def update(self):
-        # update the movement
+
+        # Update the position
         for agent in self.agents:
             agent.update_actions()
 
         # Recalculate the position if necessary
         self.remain_in_screen()
 
-        # execute the update
+        # Execute the update
         for agent in self.agents:
             agent.update()
 
@@ -49,6 +58,7 @@ class Swarm(pygame.sprite.Sprite):
 
         agents = []
 
+        # Retrieve the neighbours
         if bool(p.USE_PARTITIONS):
 
             if agent.state == State.INFECTIOUS:
@@ -59,31 +69,17 @@ class Swarm(pygame.sprite.Sprite):
 
                 for key in keys:
                     agents.add(self.partitions[key])
-
-                # print("KEYS: ", keys)
-
-                # print("ALL: ")
-                # for a in self.agents:
-                #     print(a, helperfunctions.dist(
-                #         agent.pos, a.pos), a.partition_key)
-
-                # print("NEIGHBOURS: ")
-                # for a in agents:
-                #     print(a, helperfunctions.dist(
-                #         agent.pos, a.pos), a.partition_key)
-
         else:
             agents = self.agents
 
+        # Try to infect the neighbour
         for neighbour in agents:
             if neighbour == agent:
                 continue
             else:
-                if helperfunctions.dist(agent.pos, neighbour.pos) < radius:
-                    if neighbour.state == State.SUSCEPTIBLE and random.random() <= p.INFECTION_RATE:
-                        neighbour.change_state(State.INFECTIOUS, self.swarm)
+                self.try_to_infect(agent, neighbour, radius)
 
-        # Stop sprites to be assigned to a new group every time
+        # Remove the agents from the temporary group
         if bool(p.USE_PARTITIONS):
             agents.empty()
 
@@ -111,16 +107,31 @@ class Swarm(pygame.sprite.Sprite):
         for agent in self.agents:
             agent.reset_frame()
 
+    def try_to_infect(self, agent, neighbour, radius):
+
+        if neighbour.state != State.SUSCEPTIBLE:
+            return
+
+        distance = helperfunctions.dist(agent.pos, neighbour.pos)
+
+        if distance < radius:
+
+            # Calculate chance based on the infection rate and the distance
+            chance = p.INFECTION_RATE * (p.RADIUS_VIEW - distance + 1)
+
+            if random.random() <= chance:
+                neighbour.change_state(State.INFECTIOUS, self.swarm)
+
     '''
     PARTITIONS
 
-    In order to improve the code complexity, the environment can be split into a
-    number of partitions (space partitioning). This allows the agents to only 
+    In order to reduce the code complexity, the environment can be split into a
+    number of partitions (see: space partitioning). This allows the agents to only 
     investigate the adjacent partitions instead of the whole environment when 
     looking for neighbours. 
 
-    Moreover, the partitions can be used to assign allowed-area(s) to each agent
-    and thus restict their mobility.
+    Moreover, the partitions can be used to assign "allowed-area(s)" (home, nearest
+    shop) to each agent and thus restict their mobility.
 
     '''
 
@@ -136,15 +147,6 @@ class Swarm(pygame.sprite.Sprite):
 
     # TODO
     def get_partition_boundaries(self):
-        # width = p.S_WIDTH / p.NO_PARTITIONS
-        # height = p.S_HEIGHT / p.NO_PARTITIONS
-
-        # partitions = []
-
-        # for i in range(p.NO_PARTITIONS):
-        #     for j in range(p.NO_PARTITIONS):
-        #         partitions.append(
-        #             ({'min_x': width*j, 'max_x': width*j + width, 'min_y': height*i, 'max_y': height*i + height}))
         pass
 
     # Determines in which partition the agent is currently located
