@@ -116,6 +116,10 @@ class Agent(pygame.sprite.Sprite):  # super class
             self.v + self.steering, self.max_speed, self.min_speed)
         self.pos += self.v * self.dT
 
+        # Update the partition key if necessary
+        if bool(p.USE_PARTITIONS):
+            self.partition_key = self.swarm.update_partition(self)
+
     def display(self, screen):
         screen.blit(self.image, self.rect)
 

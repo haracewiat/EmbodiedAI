@@ -1,58 +1,29 @@
 """
-Parameter settings for covid experiment
+GENERAL SETTINGS
 """
-
-"""
-General settings (DO NOT CHANGE)
-"""
-# screen settings
-S_WIDTH, S_HEIGHT = 500, 500
+# Screen settings
+S_WIDTH, S_HEIGHT = 800, 800
 SCREEN = (S_WIDTH, S_HEIGHT)
-NO_PARTITIONS = 100
 
-# choose how long to run the simulation
-# -1 : infinite, N: finite
+# Partition settings (CAUTION: Make sure a partition has a width no smaller than the person's radius)
+NO_PARTITIONS = 10
+USE_PARTITIONS = False
+
+# Simulation settings
 FRAMES = -1
-
-# choose swarm type
 SWARM = 'Covid'
-# define the number of agents
-N_AGENTS = 40
+N_AGENTS = 50
+
+# Data tracking (store data in a csv file and show live plot)
 TRACK_DATA = True
+
 # object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = True
-# TIME SETTINGS
-# How much the recovery lasts
-INFECTION_TIME = 600
-# How much the recovery time can differ between people
-MARGIN = INFECTION_TIME * 0.3
-
-
-# Agent Settings:
-# agent size
-WIDTH = 10
-HEIGHT = WIDTH
-# update
-dT = 0.2
-# agents mass
-MASS = 20
-# agent maximum/minimum speed
-MAX_SPEED = 7.
-MIN_SPEED = 4.
-
-
-# Boid Settings:
-# velocity force
-MAX_FORCE = 8.
 
 
 """
-Simulation settings to adjust:
-"""
-
-"""
-Flock class parameters (defines the environment of where the flock to act)
+SIMULATION SETTINGS
 """
 # Define the environment
 OBSTACLES = True
@@ -63,8 +34,18 @@ INITIAL_INFECTED = N_AGENTS * 0.1
 
 
 """
-Person class parameters
+AGENT SETTINGS
 """
-# view of neighbor agents
+WIDTH = 10
+HEIGHT = WIDTH
+dT = 0.2
+MASS = 20
+MAX_SPEED = 2.
+MIN_SPEED = 1.
+MAX_FORCE = 8.
+
+# Infection settings
 RADIUS_VIEW = 70
-INFECTION_RATE = 0.001
+INFECTION_TIME = 600            # How much the recovery lasts
+MARGIN = INFECTION_TIME * 0.3   # How much the recovery time can differ among agents
+INFECTION_RATE = 0.01

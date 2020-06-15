@@ -54,6 +54,7 @@ class Population(Swarm):
 
             person = Person(pos=np.array(coordinates),
                             v=None, population=self.swarm)
+
             # Infect initial number of people
             if agent < p.INITIAL_INFECTED:
                 person.change_state(State.INFECTIOUS, self.swarm)

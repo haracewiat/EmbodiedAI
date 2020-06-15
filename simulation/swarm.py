@@ -21,16 +21,16 @@ class Swarm(pygame.sprite.Sprite):
         self.agents = pygame.sprite.Group()
         self.screen = screen_size
         self.objects = Objects()
-        self.points_to_plot = {'S': [], 'I': [], 'R': []}
-        self.datapoints = []
         self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0,
                      State.SUSCEPTIBLE: p.N_AGENTS}
 
     def add_agent(self, agent):
         # Assign the agent to the right partition based on its position
-        agent.partition_key = self.find_partition_key(agent)
-        self.partitions[agent.partition_key].add(agent)
+        if p.USE_PARTITIONS:
+            agent.partition_key = self.find_partition_key(agent)
+            self.partitions[agent.partition_key].add(agent)
 
+        # Store a full list of all agents
         self.agents.add(agent)
 
     def update(self):
@@ -38,22 +38,42 @@ class Swarm(pygame.sprite.Sprite):
         for agent in self.agents:
             agent.update_actions()
 
+        # Recalculate the position if necessary
         self.remain_in_screen()
 
         # execute the update
         for agent in self.agents:
             agent.update()
 
-        # print(self.partitions)
-
     def infect_neighbors(self, agent, radius, infection_rate):
 
-        keys = self.get_adjacent_partition_keys(agent)
-        agents = self.agents
+        agents = []
 
-        for key in keys:
-            # agents.add(self.partitions[key])
-            pass
+        if bool(p.USE_PARTITIONS):
+
+            if agent.state == State.INFECTIOUS:
+                # print("AGENT: ", agent.partition_key)
+
+                keys = self.get_adjacent_partition_keys(agent.partition_key)
+                agents = pygame.sprite.Group()
+
+                for key in keys:
+                    agents.add(self.partitions[key])
+
+                # print("KEYS: ", keys)
+
+                # print("ALL: ")
+                # for a in self.agents:
+                #     print(a, helperfunctions.dist(
+                #         agent.pos, a.pos), a.partition_key)
+
+                # print("NEIGHBOURS: ")
+                # for a in agents:
+                #     print(a, helperfunctions.dist(
+                #         agent.pos, a.pos), a.partition_key)
+
+        else:
+            agents = self.agents
 
         for neighbour in agents:
             if neighbour == agent:
@@ -62,6 +82,10 @@ class Swarm(pygame.sprite.Sprite):
                 if helperfunctions.dist(agent.pos, neighbour.pos) < radius:
                     if neighbour.state == State.SUSCEPTIBLE and random.random() <= p.INFECTION_RATE:
                         neighbour.change_state(State.INFECTIOUS, self.swarm)
+
+        # Stop sprites to be assigned to a new group every time
+        if bool(p.USE_PARTITIONS):
+            agents.empty()
 
     def remain_in_screen(self):
         for agent in self.agents:
@@ -73,8 +97,6 @@ class Swarm(pygame.sprite.Sprite):
                 agent.pos[1] = float(self.screen[1])
             if agent.pos[1] > self.screen[1]:
                 agent.pos[1] = 0.
-
-        self.update_partition(agent)
 
     def display(self, screen):
         for obstacle in self.objects.obstacles:
@@ -89,10 +111,21 @@ class Swarm(pygame.sprite.Sprite):
         for agent in self.agents:
             agent.reset_frame()
 
-    def create_partitions(self):
-        width = p.S_WIDTH / p.NO_PARTITIONS
-        height = p.S_HEIGHT / p.NO_PARTITIONS
+    '''
+    PARTITIONS
 
+    In order to improve the code complexity, the environment can be split into a
+    number of partitions (space partitioning). This allows the agents to only 
+    investigate the adjacent partitions instead of the whole environment when 
+    looking for neighbours. 
+
+    Moreover, the partitions can be used to assign allowed-area(s) to each agent
+    and thus restict their mobility.
+
+    '''
+
+    # Creates keys for the partitions
+    def create_partitions(self):
         keys = {}
 
         for i in range(p.NO_PARTITIONS):
@@ -101,6 +134,7 @@ class Swarm(pygame.sprite.Sprite):
 
         return keys
 
+    # TODO
     def get_partition_boundaries(self):
         # width = p.S_WIDTH / p.NO_PARTITIONS
         # height = p.S_HEIGHT / p.NO_PARTITIONS
@@ -113,33 +147,63 @@ class Swarm(pygame.sprite.Sprite):
         #             ({'min_x': width*j, 'max_x': width*j + width, 'min_y': height*i, 'max_y': height*i + height}))
         pass
 
+    # Determines in which partition the agent is currently located
     def find_partition_key(self, agent):
         width_unit = p.S_WIDTH / p.NO_PARTITIONS
         height_unit = p.S_HEIGHT / p.NO_PARTITIONS
 
-        coordinate1 = int((agent.pos[0]-0000.1)/width_unit)
-        coordinate2 = int((agent.pos[1]-0000.1)/height_unit)
+        coordinate1 = (int(agent.pos[0]))/width_unit
+        coordinate2 = (int(agent.pos[1]))/height_unit
 
-        key = [coordinate1, coordinate2]
+        if coordinate1 >= p.NO_PARTITIONS:
+            coordinate1 = p.NO_PARTITIONS - 1
+
+        if coordinate2 >= p.NO_PARTITIONS:
+            coordinate2 = p.NO_PARTITIONS - 1
+
+        key = [int(coordinate1), int(coordinate2)]
 
         return tuple(key)
 
+    # Keeps track of which partition every agent is in
     def update_partition(self, agent):
+
         new_key = self.find_partition_key(agent)
 
         if agent.partition_key != new_key:
+
+            # Remove from old partition
             self.partitions[agent.partition_key].remove(agent)
+
+            # Add to the new partition
             self.partitions[new_key].add(agent)
-            agent.partition_key = new_key
 
-    def get_adjacent_partition_keys(self, agent):
+        return new_key
 
-        current_key = [agent.partition_key[0], agent.partition_key[1]]
+    # Returns the adjacent partitions
+    def get_adjacent_partition_keys(self, key):
+
+        current_key = [key[0], key[1]]
         keys = []
+        unit = p.NO_PARTITIONS
 
         for i in range(-1, 2):
             for j in range(-1, 2):
-                if 0 <= current_key[0]+j < p.NO_PARTITIONS and 0 <= current_key[1]+i < p.NO_PARTITIONS:
-                    keys.append(tuple([current_key[0]+j, current_key[1]+i]))
+
+                # Create circular buffer
+                # If there are no walls around the environment if p.INSIDE?
+                x = current_key[0]+j
+                y = current_key[1]+i
+
+                if x < 0:
+                    x = unit-1
+                elif x >= unit:
+                    x = 0
+                if y < 0:
+                    y = unit-1
+                elif y >= unit:
+                    y = 0
+
+                keys.append(tuple([x, y]))
 
         return keys
