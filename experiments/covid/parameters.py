@@ -8,7 +8,7 @@ General settings (DO NOT CHANGE)
 # screen settings
 S_WIDTH, S_HEIGHT = 500, 500
 SCREEN = (S_WIDTH, S_HEIGHT)
-TRACK_DATA = True
+NO_PARTITIONS = 100
 
 # choose how long to run the simulation
 # -1 : infinite, N: finite
@@ -17,7 +17,8 @@ FRAMES = -1
 # choose swarm type
 SWARM = 'Covid'
 # define the number of agents
-N_AGENTS = 100
+N_AGENTS = 40
+TRACK_DATA = True
 # object location
 OBJECT_LOC = [S_WIDTH/2., S_HEIGHT/2.]
 CONVEX = True
@@ -37,8 +38,8 @@ dT = 0.2
 # agents mass
 MASS = 20
 # agent maximum/minimum speed
-MAX_SPEED = 5.
-MIN_SPEED = 2.
+MAX_SPEED = 7.
+MIN_SPEED = 4.
 
 
 # Boid Settings:
@@ -58,7 +59,7 @@ OBSTACLES = True
 OUTSIDE = False
 
 # Number of infected people initially
-INITIAL_INFECTED = N_AGENTS * 0.01
+INITIAL_INFECTED = N_AGENTS * 0.1
 
 
 """

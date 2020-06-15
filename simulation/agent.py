@@ -26,6 +26,8 @@ class Agent(pygame.sprite.Sprite):  # super class
         self.state = State.SUSCEPTIBLE
         self.color = color
 
+        self.partition_key = None
+
         self.image_file = image
         if self.image_file != None:  # load image from file
             self.base_image, self.rect = helperfunctions.image_with_rect(self.image_file, [

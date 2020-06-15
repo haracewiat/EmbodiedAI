@@ -104,13 +104,14 @@ class Data():
         data.update({'x_value': self.x_value})
         data.update(data)
 
-        # Change values to percentage
-        for key in data:
-            if key != "x_value":
-                data[key] = (data[key] / p.N_AGENTS) * p.N_AGENTS
+        # Uncomment to change values to percentage
+        # for key in data:
+        #     if key != "x_value":
+        #         data[key] = (data[key] / p.N_AGENTS)
 
         with open('data.csv', 'a', newline='') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=self.field_names)
+            # Only if data if different to previous row?
             csv_writer.writerow(data)
 
         self.x_value += 1
