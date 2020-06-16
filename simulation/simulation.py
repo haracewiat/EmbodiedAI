@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 import matplotlib.pyplot as plt
 from experiments.flocking.flock import Flock
 from experiments.aggregation.aggregation import Aggregations
