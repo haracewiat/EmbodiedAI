@@ -1,17 +1,10 @@
-import pygame
-import sys
-from itertools import count
 from simulation import config
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from experiments.covid import parameters as p
 from simulation.agent import State
-import numpy as np
 import pandas as pd
-
 import csv
-import random
-import time
 
 
 class LivePlot():

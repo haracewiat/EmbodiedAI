@@ -1,18 +1,28 @@
 from experiments.covid import parameters as p
 from enum import Enum
 
+buildings = []
+walls = []
+
 
 def scenario0():
-    buildings = []
-    return buildings
+    return buildings, walls
 
 
 def scenario1():
-    buildings = []
+
+    # Dummy, change to actual wall Object
+    walls.append(1)
+
+    return buildings, walls
+
+
+def scenario2():
+
     buildings.append(Building(Building_type.HOME))
     buildings.append(Building(Building_type.SHOP))
 
-    return buildings
+    return buildings, walls
 
 
 class Building:
@@ -25,8 +35,8 @@ class Building:
     def get_img(self, type):
 
         img = {
-            Building_type.HOME: 'experiments/covid/images/home.png',
-            Building_type.SHOP: 'experiments/covid/images/shop.png',
+            Building_type.HOME: 'experiments/covid/images/buildings/home.png',
+            Building_type.SHOP: 'experiments/covid/images/buildings/shop.png',
         }
 
         return img.get(type)

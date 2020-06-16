@@ -34,7 +34,7 @@ class Agent(pygame.sprite.Sprite):  # super class
                                                                          width, height])
             self.image = self.base_image
             self.mask = pygame.mask.from_surface(self.image)
-            self.mask = self.mask.scale((12, 10))
+            self.mask = self.mask.scale((p.WIDTH, p.HEIGHT))
 
         else:  # draw an agent
             self.draw()
@@ -84,6 +84,11 @@ class Agent(pygame.sprite.Sprite):  # super class
                     random.randrange(1, self.max_speed + 1) * helperfunctions.plusminus()]
         velocity *= np.array([np.cos(angle), np.sin(angle)])
         return velocity
+
+    def set_position(self, pos):
+        self._pos = pos
+        # update the rect position as thats actually displayed
+        self.rect.center = tuple(pos)
 
     def wander(self, wander_dist, wander_radius, wander_angle):
         """

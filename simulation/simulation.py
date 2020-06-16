@@ -10,7 +10,9 @@ from experiments.covid.population import Population
 from experiments.aggregation.aggregation import Aggregations
 from experiments.covid import parameters as p
 from experiments.flocking.flock import Flock
+import multiprocessing
 import matplotlib.pyplot as plt
+import time
 import pygame
 import sys
 
@@ -21,14 +23,15 @@ General simulation pipeline, suitable for all experiments
 
 class Simulation():
     def __init__(self, num_agents, screen_size, swarm_type, iterations):
-        # general settings
+        # General settings
         self.screensize = screen_size
         self.screen = pygame.display.set_mode(screen_size)
         self.sim_background = pygame.Color('gray21')
         self.iter = iterations
         self.swarm_type = swarm_type
+        self.first_loop = True
 
-        # swarm settings
+        # Swarm settings
         self.num_agents = num_agents
         if swarm_type == 'Flock':
             self.swarm = Flock(screen_size)
@@ -41,6 +44,7 @@ class Simulation():
             print('None of the possible swarms selected')
             sys.exit()
 
+        # Data settings
         if bool(p.TRACK_DATA):
             # Create data storage
             self.data = self.swarm.data
@@ -48,8 +52,9 @@ class Simulation():
             self.data_storage.initialize()
 
             # Spawn the live plot
-            self.plot = threading.Thread(target=LivePlot)
-            self.plot.setDaemon(True)
+            #self.plot = threading.Thread(target=LivePlot)
+            self.plot = multiprocessing.Process(target=LivePlot)
+            self.plot.daemon = True
             self.plot.start()
 
         # update
@@ -102,10 +107,13 @@ class Simulation():
         if self.iter == -1:
             while self.running:
                 self.simulate()
+
+                if bool(self.first_loop) and bool(p.TRACK_DATA):
+                    time.sleep(4)
+                    self.first_loop = False
+
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        # config.terminate_threads = True
-                        # self.plot.join()
                         self.running = False
         else:
             for i in range(self.iter):

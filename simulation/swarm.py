@@ -62,7 +62,6 @@ class Swarm(pygame.sprite.Sprite):
         if bool(p.USE_PARTITIONS):
 
             if agent.state == State.INFECTIOUS:
-                # print("AGENT: ", agent.partition_key)
 
                 keys = self.get_adjacent_partition_keys(agent.partition_key)
                 agents = pygame.sprite.Group()
@@ -115,11 +114,7 @@ class Swarm(pygame.sprite.Sprite):
         distance = helperfunctions.dist(agent.pos, neighbour.pos)
 
         if distance < radius:
-
-            # Calculate chance based on the infection rate and the distance
-            chance = p.INFECTION_RATE * (p.RADIUS_VIEW - distance + 1)
-
-            if random.random() <= chance:
+            if random.random() <= p.INFECTION_RATE and not bool(self.wall_inbetween(agent, neighbour)):
                 neighbour.change_state(State.INFECTIOUS, self.swarm)
 
     '''
