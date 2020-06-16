@@ -43,9 +43,7 @@ class Population(Swarm):
     def spawn_buildings(self):
         buildings = p.BUILDINGS
 
-        for building in buildings:
-
-            '''
+        '''
             DUMMY FUNCTION
             > Add method to randomly select the position (based on free partition)
             > Add method to determine behaviour based on the building type
@@ -53,17 +51,10 @@ class Population(Swarm):
             > Assign each person to a house (?)
 
             This function demonstrates the ability to spawn the buildings of different types.
-            '''
+        '''
+        for building in buildings:
             self.objects.add_object(
-                file=building.img, pos=[50, 450], scale=[100, 100], type='site')
-            self.objects.add_object(
-                file=building.img, pos=[150, 350], scale=[100, 100], type='site')
-            self.objects.add_object(
-                file=building.img, pos=[250, 50], scale=[100, 100], type='site')
-            self.objects.add_object(
-                file='experiments/covid/images/shop.png', pos=[350, 150], scale=[100, 100], type='site')
-            self.objects.add_object(
-                file='experiments/covid/images/shop.png', pos=[450, 250], scale=[100, 100], type='site')
+                file=building.img, pos=[random.randrange(100, 1000, 50), random.randrange(100, 1000, 50)], scale=[100, 100], type='site')
 
     def avoid_obstacles(self, coordinates):
         pass

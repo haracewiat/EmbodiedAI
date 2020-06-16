@@ -4,8 +4,6 @@ from enum import Enum
 
 def scenario0():
     buildings = []
-    buildings.append(Building(Building_type.HOME))
-
     return buildings
 
 

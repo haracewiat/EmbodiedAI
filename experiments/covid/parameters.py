@@ -14,12 +14,12 @@ USE_PARTITIONS = True
 # Simulation settings
 FRAMES = -1
 SWARM = 'Covid'
-N_AGENTS = 20
+N_AGENTS = 30
 DAY = 200
-BUILDINGS = s.scenario0()
+BUILDINGS = s.scenario1()
 
 # Data tracking (store data in a csv file and show live plot)
-TRACK_DATA = False
+TRACK_DATA = True
 INTERVAL = 100           # Pace at which the plot is refreshed
 
 
@@ -29,7 +29,7 @@ SIMULATION SETTINGS
 # Scenario settings
 OBSTACLES = True
 OUTSIDE = False
-INITIAL_INFECTED = N_AGENTS * 0.01       # Number of infected people initially
+INITIAL_INFECTED = N_AGENTS * 0.05       # Number of infected people initially
 
 
 """
@@ -39,8 +39,8 @@ WIDTH = S_WIDTH * 0.01
 HEIGHT = WIDTH
 dT = 0.2
 MASS = 20
-MAX_SPEED = 2.
-MIN_SPEED = 1.
+MAX_SPEED = 4.
+MIN_SPEED = 2.
 MAX_FORCE = 8.
 
 # Infection settings
