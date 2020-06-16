@@ -24,11 +24,10 @@ class Person(Agent):
     def update_actions(self):
 
         # Avoid walls
-        for obstacle in self.swarm.objects.obstacles:
-            collide = pygame.sprite.collide_mask(self, obstacle)
+        for wall in self.swarm.objects.walls:
+            collide = pygame.sprite.collide_mask(self, wall)
             if bool(collide):
-                # TODO add avoid_wall method
-                self.v = -self.v
+                self.avoid_obstacle()
 
         # If infected, spread the infection
         self.infect()

@@ -34,7 +34,7 @@ class Population(Swarm):
             person = Person(pos=np.array(coordinates),
                             v=None, population=self.swarm)
 
-            # Re-estimate the coordinates if obstacles are present
+            # Re-estimate the coordinates if walls are present
             self.avoid_walls(person)
 
             # Infect the initial number of people
@@ -58,46 +58,28 @@ class Population(Swarm):
         '''
         for building in buildings:
             self.objects.add_object(
-                file=building.img, pos=[random.randrange(100, int(p.S_HEIGHT/2), 100), random.randrange(100, int(p.S_HEIGHT/2), 100)], scale=[100, 100], type='site')
+                file=building.img, pos=[random.randrange(100, int(p.S_HEIGHT/2), 100), random.randrange(100, int(p.S_HEIGHT/2), 100)], scale=[100, 100], type='building')
 
     def spawn_walls(self):
         walls = p.WALLS
 
         for wall in walls:
             self.objects.add_object(
-                file='experiments/covid/images/walls/wall3.png', pos=[int(p.S_WIDTH/2), int(p.S_HEIGHT/2)], scale=[p.S_WIDTH, p.S_HEIGHT], type='obstacle')
+                file=wall.img, pos=wall.position, scale=wall.scale, type='wall')
 
     def avoid_walls(self, agent):
 
-        for obstacle in self.swarm.objects.obstacles:
+        for wall in self.swarm.objects.walls:
 
             while True:
 
-                collide = pygame.sprite.collide_mask(agent, obstacle)
+                collide = pygame.sprite.collide_mask(agent, wall)
 
                 if collide is not None:
                     agent.pos = np.array(
                         helperfunctions.generate_coordinates(self.screen))
                 else:
                     break
-
-    def wall_inbetween(self, agent1, agent2):
-
-        collides = False
-
-        # TODO
-        # Get a mask of a line drawn from the centre of agent1 to the centre of agent2
-        # surface = pygame.Surface(p.SCREEN, pygame.SRCALPHA)
-        # pygame.draw.line(surface, 0, agent1.pos, agent2.pos, 0)
-        # mask = pygame.mask.from_surface(surface)
-
-        # # Check if the line intersects any of the masks
-        # for wall in self.swarm.objects.obstacles:
-        #     if wall.mask.overlap_mask(mask, (0, 0)) is not None:
-        #         collides = True
-        #         break
-
-        return collides
 
     def spread_infection(self, agent, radius):
         super().infect_neighbors(agent, radius, p.INFECTION_RATE)

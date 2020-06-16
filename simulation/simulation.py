@@ -52,7 +52,6 @@ class Simulation():
             self.data_storage.initialize()
 
             # Spawn the live plot
-            #self.plot = threading.Thread(target=LivePlot)
             self.plot = multiprocessing.Process(target=LivePlot)
             self.plot.daemon = True
             self.plot.start()
@@ -91,8 +90,6 @@ class Simulation():
         self.screen.fill(self.sim_background)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                # config.terminate_threads = True
-                # self.plot.join()
                 self.running = False
 
         self.update()

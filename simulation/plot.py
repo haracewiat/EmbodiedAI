@@ -33,36 +33,30 @@ class LivePlot():
         self.run()
 
     def run(self):
-        if not bool(config.terminate_threads):
-            animation = FuncAnimation(
-                plt.gcf(), self.animate, interval=p.INTERVAL)
-            plt.tight_layout()
-            plt.show()
+        animation = FuncAnimation(
+            plt.gcf(), self.animate, interval=p.INTERVAL)
+        plt.tight_layout()
+        plt.show()
 
     def animate(self, i):
 
-        if not bool(config.terminate_threads):
+        data = pd.read_csv('data.csv')
 
-            data = pd.read_csv('data.csv')
+        data_points = []
+        x = []
 
-            data_points = []
-            x = []
+        for i, key in enumerate(data):
+            if i == 0:
+                x = data[key]
+            else:
+                data_points.append(data[key])
 
-            for i, key in enumerate(data):
-                if i == 0:
-                    x = data[key]
-                else:
-                    data_points.append(data[key])
+        plt.cla()
 
-            plt.cla()
+        plt.stackplot(x, data_points, labels=self.labels,
+                      colors=self.colors)
 
-            plt.stackplot(x, data_points, labels=self.labels,
-                          colors=self.colors)
-
-            plt.legend(loc='upper left')
-
-        else:
-            plt.close('all')
+        plt.legend(loc='upper left')
 
 
 class Data():

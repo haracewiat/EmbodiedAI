@@ -1,5 +1,3 @@
-terminate_threads = False
-
 # RGB values (for pygame)
 SUSCEPTIBLE = (94, 185, 255)            # BLUE
 RECOVERED = (207, 207, 207)             # GREY

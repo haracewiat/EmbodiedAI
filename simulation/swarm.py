@@ -9,8 +9,6 @@ import random
 General swarm class that defines general swarm properties, which are common across different swarm types
 """
 
-# superclass
-
 
 class Swarm(pygame.sprite.Sprite):
 
@@ -94,11 +92,11 @@ class Swarm(pygame.sprite.Sprite):
                 agent.pos[1] = 0.
 
     def display(self, screen):
-        for obstacle in self.objects.obstacles:
-            obstacle.display(screen)
+        for wall in self.objects.walls:
+            wall.display(screen)
 
-        for site in self.objects.sites:
-            site.display(screen)
+        for building in self.objects.buildings:
+            building.display(screen)
 
         for agent in self.agents:
             agent.display(screen)
@@ -114,7 +112,7 @@ class Swarm(pygame.sprite.Sprite):
         distance = helperfunctions.dist(agent.pos, neighbour.pos)
 
         if distance < radius:
-            if random.random() <= p.INFECTION_RATE and not bool(self.wall_inbetween(agent, neighbour)):
+            if random.random() <= p.INFECTION_RATE:
                 neighbour.change_state(State.INFECTIOUS, self.swarm)
 
     '''
