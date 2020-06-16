@@ -18,15 +18,17 @@ class Simulation():
         self.screen = pygame.display.set_mode(screen_size)
         self.sim_background = pygame.Color('gray21')
         self.iter = iterations
+        self.swarm_type = swarm_type
+
 
         #swarm settings
         self.num_agents = num_agents
-        if swarm_type == 'Flock':
+        if self.swarm_type == 'Flock':
             self.swarm = Flock(screen_size)
-        elif swarm_type == 'Aggregation':
+        elif self.swarm_type == 'Aggregation':
             self.swarm = Aggregations(screen_size)
             pass
-        elif swarm_type == 'Covid':
+        elif self.swarm_type == 'Covid':
             self.swarm = Population(screen_size)
         else:
             print('None of the possible swarms selected')
