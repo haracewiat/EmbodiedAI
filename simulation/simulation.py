@@ -10,7 +10,7 @@ from experiments.covid.population import Population
 from experiments.aggregation.aggregation import Aggregations
 from experiments.covid import parameters as p
 from experiments.flocking.flock import Flock
-import multiprocessing
+from multiprocessing import Process, Queue
 import matplotlib.pyplot as plt
 import time
 import pygame
@@ -30,6 +30,7 @@ class Simulation():
         self.iter = iterations
         self.swarm_type = swarm_type
         self.first_loop = True
+        self.time = p.DAY/2
 
         # Swarm settings
         self.num_agents = num_agents
@@ -46,13 +47,20 @@ class Simulation():
 
         # Data settings
         if bool(p.TRACK_DATA):
+            # Store R0
+            self.r_value = 0
+
             # Create data storage
             self.data = self.swarm.data
             self.data_storage = Data(self.data)
             self.data_storage.initialize()
 
+            # Create queue to exchange data
+            self.queue = Queue()
+            self.queue.put(self.r_value)
+
             # Spawn the live plot
-            self.plot = multiprocessing.Process(target=LivePlot)
+            self.plot = Process(target=LivePlot, args=(self.queue, ))
             self.plot.daemon = True
             self.plot.start()
 
@@ -87,6 +95,12 @@ class Simulation():
         if bool(p.TRACK_DATA):
             self.data_storage.add_entry(self.swarm.data)
 
+            if self.time == p.DAY/2:
+                self.queue.put(self.swarm.get_reproduction_rate())
+                self.time = 0
+            else:
+                self.time += 1
+
         self.screen.fill(self.sim_background)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -106,7 +120,7 @@ class Simulation():
                 self.simulate()
 
                 if bool(self.first_loop) and bool(p.TRACK_DATA):
-                    time.sleep(4)
+                    time.sleep(p.DELAY)
                     self.first_loop = False
 
                 for event in pygame.event.get():

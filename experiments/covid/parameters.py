@@ -16,11 +16,15 @@ FRAMES = -1
 SWARM = 'Covid'
 N_AGENTS = 100
 DAY = 200
-BUILDINGS, WALLS = s.scenario4()
+BUILDINGS, WALLS = s.scenario3()
+
+# Policies
+SOCIAL_DISTANCING = False
 
 # Data tracking (store data in a csv file and show live plot)
-TRACK_DATA = False
-INTERVAL = 100           # Pace at which the plot is refreshed
+TRACK_DATA = True
+DELAY = 10                 # Seconds to dealy the start of the simulation
+INTERVAL = 50              # Pace at which the plot is refreshed
 
 
 """
@@ -37,8 +41,8 @@ WIDTH = S_WIDTH * 0.01
 HEIGHT = WIDTH
 dT = 0.2
 MASS = 20
-MAX_SPEED = S_WIDTH * 0.004
-MIN_SPEED = S_WIDTH * 0.002
+MAX_SPEED = int(S_WIDTH * 0.006)
+MIN_SPEED = int(S_WIDTH * 0.005)
 MAX_FORCE = 8.
 
 # Infection settings

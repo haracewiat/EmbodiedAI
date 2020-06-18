@@ -9,13 +9,17 @@ import csv
 
 class LivePlot():
 
-    def __init__(self):
+    def __init__(self, queue):
         plt.style.use('fivethirtyeight')
 
         # Get initial information
         self.data = pd.read_csv('data.csv')
         self.labels = []
         colors_array = []
+
+        # Basic Reproduction Number
+        self.r_value = 0
+        self.queue = queue
 
         for i, key in enumerate(self.data):
             if i != 0:
@@ -57,6 +61,12 @@ class LivePlot():
                       colors=self.colors)
 
         plt.legend(loc='upper left')
+
+        if not self.queue.empty():
+            self.r_value = self.queue.get()
+
+        plt.title("Basic Reproduction Number: " +
+                  str(self.r_value + 0.0), fontdict=None, loc='center', fontsize=15)
 
 
 class Data():

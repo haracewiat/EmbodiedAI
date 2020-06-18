@@ -54,31 +54,54 @@ class Swarm(pygame.sprite.Sprite):
 
     def infect_neighbors(self, agent, radius, infection_rate):
 
-        agents = []
+        if agent.state == State.INFECTIOUS:
 
-        # Retrieve the neighbours
-        if bool(p.USE_PARTITIONS):
+            agents = self.find_neighbours(agent)
 
-            if agent.state == State.INFECTIOUS:
+            # Try to infect the neighbour
+            for neighbour in agents:
+                if neighbour == agent:
+                    continue
+                else:
+                    self.try_to_infect(agent, neighbour, radius)
 
-                keys = self.get_adjacent_partition_keys(agent.partition_key)
-                agents = pygame.sprite.Group()
+            # Remove the agents from the temporary group
+            if bool(p.USE_PARTITIONS):
+                agents.empty()
 
-                for key in keys:
-                    agents.add(self.partitions[key])
-        else:
-            agents = self.agents
+    def avoid_neighbours(self, agent):
 
-        # Try to infect the neighbour
+        agents = self.find_neighbours(agent)
+
+        # Avoid the neighbour
         for neighbour in agents:
             if neighbour == agent:
                 continue
             else:
-                self.try_to_infect(agent, neighbour, radius)
+                distance = helperfunctions.dist(agent.pos, neighbour.pos)
+
+                if distance < p.RADIUS_VIEW:
+                    agent.v = [agent.v[1], agent.v[0]]
 
         # Remove the agents from the temporary group
         if bool(p.USE_PARTITIONS):
             agents.empty()
+
+    def find_neighbours(self, agent):
+
+        agents = []
+
+        # Retrieve the neighbours
+        if bool(p.USE_PARTITIONS):
+            keys = self.get_adjacent_partition_keys(agent.partition_key)
+            agents = pygame.sprite.Group()
+
+            for key in keys:
+                agents.add(self.partitions[key])
+        else:
+            agents = self.agents
+
+        return agents
 
     def remain_in_screen(self):
         for agent in self.agents:
@@ -114,6 +137,7 @@ class Swarm(pygame.sprite.Sprite):
         if distance < radius:
             if random.random() <= p.INFECTION_RATE:
                 neighbour.change_state(State.INFECTIOUS, self.swarm)
+                agent.reproduction_rate += 1
 
     '''
     PARTITIONS

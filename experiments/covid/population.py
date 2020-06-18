@@ -24,6 +24,11 @@ class Population(Swarm):
         self.spawn_buildings()
         self.spawn_people()
 
+        # Basic reproduction number
+        self.basic_reproduction_number = []
+        self.previous_infected = 0
+        self.current_infected = 0
+
     def spawn_people(self):
         for agent in range(self.num_agents):
 
@@ -83,3 +88,24 @@ class Population(Swarm):
 
     def spread_infection(self, agent, radius):
         super().infect_neighbors(agent, radius, p.INFECTION_RATE)
+
+    def get_reproduction_rate(self):
+
+        self.previous_infected = self.current_infected
+        self.current_infected = self.data[State.INFECTIOUS]
+
+        x = []
+
+        # for agent in self.agents:
+        #     if agent.state != State.SUSCEPTIBLE:
+        #         x.append(agent.reproduction_rate)
+
+        # # print(x)
+        y = self.current_infected / self.previous_infected if self.previous_infected > 0 else 0
+
+        if self.data[State.SUSCEPTIBLE] < p.N_AGENTS and self.data[State.INFECTIOUS] == 0:
+            pass
+        else:
+            self.basic_reproduction_number = [y]
+
+        return round(y, 1)

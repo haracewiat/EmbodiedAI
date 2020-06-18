@@ -18,6 +18,7 @@ class Person(Agent):
 
         self.swarm = population
         self.time = 0
+        self.reproduction_rate = 0
         self.recovery_time = random.randint(
             p.INFECTION_TIME-p.MARGIN, p.INFECTION_TIME + p.MARGIN)
 
@@ -28,6 +29,10 @@ class Person(Agent):
             collide = pygame.sprite.collide_mask(self, wall)
             if bool(collide):
                 self.avoid_obstacle()
+
+        # Keep distance from others
+        if p.SOCIAL_DISTANCING:
+            self.swarm.avoid_neighbours(self)
 
         # If infected, spread the infection
         self.infect()
