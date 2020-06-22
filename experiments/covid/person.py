@@ -21,6 +21,7 @@ class Person(Agent):
         self.reproduction_rate = 0
         self.recovery_time = random.randint(
             p.INFECTION_TIME-p.MARGIN, p.INFECTION_TIME + p.MARGIN)
+        self.exposed_time = random.randint( p.EXPOSED_TIME, p.EXPOSED_TIME23)
 
     def update_actions(self):
 
@@ -51,6 +52,10 @@ class Person(Agent):
                 self.time = 0
             else:
                 self.time += 1
-    # def exposed(self):
-    #     if self.state == State.EXPOSED: 
-    #         self.change_state(State.EXPOSED, self.swarm)
+    def exposed(self):
+        if self.state == State.EXPOSED: 
+            if self.time >= self.exposed_time:
+                self.change_state(State.INFECTIOUS, self.swarm)
+            else:
+                self.time += 20
+        

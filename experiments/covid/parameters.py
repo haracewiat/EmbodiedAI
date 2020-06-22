@@ -50,3 +50,5 @@ RADIUS_VIEW = WIDTH*7
 INFECTION_TIME = DAY * 2        # How much the recovery lasts
 MARGIN = INFECTION_TIME * 0.3   # How much the recovery time can differ among agents
 INFECTION_RATE = 0.01
+EXPOSED_TIME = DAY * 0.5        # How much the exposed fase lasts
+EXPOSED_TIME23 = DAY * 0.7        # How much the exposed fase lasts

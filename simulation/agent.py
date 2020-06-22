@@ -144,8 +144,8 @@ class Agent(pygame.sprite.Sprite):  # super class
                 swarm.data[State.INFECTIOUS] -= 1
             elif self.state == State.INFECTIOUS:
                 swarm.data[State.SUSCEPTIBLE] -= 1
-            # swarm.data[State[self.state] - 1] -= 1
-            swarm.data[self.state] += 1
+            elif self.state == State.EXPOSED: 
+                swarm.data[State.INFECTIOUS] -= 1
 
     def draw(self):
         self.image = pygame.Surface((p.WIDTH, p.HEIGHT), pygame.SRCALPHA)
