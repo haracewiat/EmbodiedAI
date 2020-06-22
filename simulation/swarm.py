@@ -26,7 +26,7 @@ class Swarm(pygame.sprite.Sprite):
         self.objects = Objects()
 
         # Virus spread data
-        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0,
+        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0, State.EXPOSED: 0,
                      State.SUSCEPTIBLE: p.N_AGENTS}
 
     def add_agent(self, agent):
@@ -136,7 +136,7 @@ class Swarm(pygame.sprite.Sprite):
 
         if distance < radius:
             if random.random() <= p.INFECTION_RATE:
-                neighbour.change_state(State.INFECTIOUS, self.swarm)
+                neighbour.change_state(State.EXPOSED, self.swarm)
                 agent.reproduction_rate += 1
 
     '''

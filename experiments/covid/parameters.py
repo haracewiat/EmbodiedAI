@@ -16,7 +16,7 @@ FRAMES = -1
 SWARM = 'Covid'
 N_AGENTS = 100
 DAY = 200
-BUILDINGS, WALLS = s.scenario3()
+BUILDINGS, WALLS = s.scenario2()
 
 # Policies
 SOCIAL_DISTANCING = False

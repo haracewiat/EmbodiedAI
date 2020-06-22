@@ -161,10 +161,13 @@ class Agent(pygame.sprite.Sprite):  # super class
             self.color = config.INFECTIOUS
         elif self.state == State.RECOVERED:
             self.color = config.RECOVERED
+        elif self.state == State.EXPOSED:
+            self.color = config.EXPOSED
 
 
 class State(Enum):
     SUSCEPTIBLE = 0
-    INFECTIOUS = 1
-    RECOVERED = 2
-    VACCINATED = 3
+    INFECTIOUS = 2
+    EXPOSED = 1
+    RECOVERED = 3
+
