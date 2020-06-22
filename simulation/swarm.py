@@ -17,6 +17,12 @@ class Swarm(pygame.sprite.Sprite):
         self.points_to_plot=plot
         self.datapoints = []
 
+<<<<<<< Updated upstream
+=======
+        # Virus spread data
+        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0, State.EXPOSED : 0,
+                     State.SUSCEPTIBLE: p.N_AGENTS}
+>>>>>>> Stashed changes
 
     def add_agent(self,agent):
         self.agents.add(agent)
@@ -67,7 +73,82 @@ class Swarm(pygame.sprite.Sprite):
         #update the movement
         self.datapoints = []
         for agent in self.agents:
+<<<<<<< Updated upstream
             agent.update_actions()
+=======
+            agent.reset_frame()
+
+    def try_to_infect(self, agent, neighbour, radius):
+
+        if neighbour.state != State.SUSCEPTIBLE:
+            return
+
+        distance = helperfunctions.dist(agent.pos, neighbour.pos)
+
+        if distance < radius:
+            if random.random() <= p.INFECTION_RATE:
+                neighbour.change_state(State.EXPOSED, self.swarm)
+          
+    '''
+    PARTITIONS
+
+    In order to reduce the code complexity, the environment can be split into a
+    number of partitions (see: space partitioning). This allows the agents to only 
+    investigate the adjacent partitions instead of the whole environment when 
+    looking for neighbours. 
+
+    Moreover, the partitions can be used to assign "allowed-area(s)" (home, nearest
+    shop) to each agent and thus restict their mobility.
+
+    '''
+
+    # Creates keys for the partitions
+    def create_partitions(self):
+        keys = {}
+
+        for i in range(p.NO_PARTITIONS):
+            for j in range(p.NO_PARTITIONS):
+                keys[tuple([j, i])] = pygame.sprite.Group()
+
+        return keys
+
+    # TODO
+    def get_partition_boundaries(self):
+        pass
+
+    # Determines in which partition the agent is currently located
+    def find_partition_key(self, agent):
+        width_unit = p.S_WIDTH / p.NO_PARTITIONS
+        height_unit = p.S_HEIGHT / p.NO_PARTITIONS
+
+        coordinate1 = (int(agent.pos[0]))/width_unit
+        coordinate2 = (int(agent.pos[1]))/height_unit
+
+        if coordinate1 >= p.NO_PARTITIONS:
+            coordinate1 = p.NO_PARTITIONS - 1
+
+        if coordinate2 >= p.NO_PARTITIONS:
+            coordinate2 = p.NO_PARTITIONS - 1
+
+        key = [int(coordinate1), int(coordinate2)]
+
+        return tuple(key)
+
+    # Keeps track of which partition every agent is in
+    def update_partition(self, agent):
+
+        new_key = self.find_partition_key(agent)
+
+        if agent.partition_key != new_key:
+
+            # Remove from old partition
+            self.partitions[agent.partition_key].remove(agent)
+
+            # Add to the new partition
+            self.partitions[new_key].add(agent)
+
+        return new_key
+>>>>>>> Stashed changes
 
         if len(self.datapoints):
             self.add_point(self.datapoints)

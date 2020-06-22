@@ -106,3 +106,49 @@ class Agent(pygame.sprite.Sprite): #super class
 
     def reset_frame(self):
         self.steering = np.zeros(2)
+<<<<<<< Updated upstream
+=======
+
+    def change_state(self, state, swarm):
+        if self.state != state:
+            self.state = state
+
+            # Update drawing
+            self.set_color()
+            self.draw()
+
+            # Update data
+            if self.state == State.RECOVERED:
+                swarm.data[State.INFECTIOUS] -= 1
+            elif self.state == State.INFECTIOUS:
+                swarm.data[State.SUSCEPTIBLE] -= 1
+            elif self.state == State.INFECTIOUS:
+                swarm.data[State.EXPOSED] -= 1
+            # swarm.data[State[self.state] - 1] -= 1
+            swarm.data[self.state] += 1
+
+    def draw(self):
+        self.image = pygame.Surface((p.WIDTH, p.HEIGHT), pygame.SRCALPHA)
+        pygame.gfxdraw.filled_circle(self.image, int(
+            p.WIDTH/2), int(p.WIDTH/2), int(p.WIDTH/2)-1, self.color)
+        self.rect = self.image.get_rect()
+        self.mask = pygame.mask.from_surface(self.image)
+
+    def set_color(self):
+        if self.state == State.SUSCEPTIBLE:
+            self.color = config.SUSCEPTIBLE
+        elif self.state == State.INFECTIOUS:
+            self.color = config.INFECTIOUS
+        elif self.state == State.RECOVERED:
+            self.color = config.RECOVERED
+        elif self.state == State.EXPOSED:
+            self.color = config.EXPOSED
+
+
+class State(Enum):
+    SUSCEPTIBLE = 0
+    INFECTIOUS = 1
+    RECOVERED = 2
+    VACCINATED = 3
+    EXPOSED = 1
+>>>>>>> Stashed changes
