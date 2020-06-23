@@ -41,6 +41,8 @@ class Person(Agent):
         # If infected, recover after a given period
         self.recover()
 
+        self.exposed()
+
     def infect(self):
         if self.state == State.INFECTIOUS:
             self.swarm.spread_infection(self, p.RADIUS_VIEW)
@@ -52,10 +54,12 @@ class Person(Agent):
                 self.time = 0
             else:
                 self.time += 1
+
     def exposed(self):
         if self.state == State.EXPOSED: 
             if self.time >= self.exposed_time:
                 self.change_state(State.INFECTIOUS, self.swarm)
+                self.time = 0
             else:
-                self.time += 20
+                self.time += 1
         
