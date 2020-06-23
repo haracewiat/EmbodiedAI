@@ -16,6 +16,7 @@ FRAMES = -1
 SWARM = 'Covid'
 N_AGENTS = 100
 DAY = 200
+DIE = 10
 BUILDINGS, WALLS = s.scenario2()
 
 # Policies
@@ -52,3 +53,6 @@ MARGIN = INFECTION_TIME * 0.3   # How much the recovery time can differ among ag
 INFECTION_RATE = 0.01
 EXPOSED_TIME = DAY * 0.2        # How much the exposed fase lasts
 EXPOSED_TIME23 = DAY * 0.5        # How much the exposed fase lasts
+LIFESPAN = DIE * 10        # How much the lifespan is
+MARGIN_DYING = INFECTION_TIME * 0.2   # How much the time the agent lives can differ among agents
+

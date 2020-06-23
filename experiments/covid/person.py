@@ -18,10 +18,14 @@ class Person(Agent):
 
         self.swarm = population
         self.time = 0
+        self.agent_lifespan = 0
         self.reproduction_rate = 0
         self.recovery_time = random.randint(
             p.INFECTION_TIME-p.MARGIN, p.INFECTION_TIME + p.MARGIN)
         self.exposed_time = random.randint( p.EXPOSED_TIME, p.EXPOSED_TIME23)
+        self.dying_chance = random.randint(
+            p.LIFESPAN-p.MARGIN_DYING, p.LIFESPAN + p.MARGIN_DYING
+            )
 
     def update_actions(self):
 
@@ -42,6 +46,7 @@ class Person(Agent):
         self.recover()
 
         self.exposed()
+        self.dying()
 
     def infect(self):
         if self.state == State.INFECTIOUS:
@@ -62,4 +67,15 @@ class Person(Agent):
                 self.time = 0
             else:
                 self.time += 1
+
+    def dying(self):
+         if self.state == State.INFECTIOUS: 
+            if self.agent_lifespan >= self.recovery_time:
+                self.change_state(State.DEAD, self.swarm)
+                self.agent_lifespan = 0
+            else:
+                self.agent_lifespan += 1
+
+            
+
         

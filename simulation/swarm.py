@@ -26,7 +26,7 @@ class Swarm(pygame.sprite.Sprite):
         self.objects = Objects()
 
         # Virus spread data
-        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0, State.EXPOSED: 0,
+        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0, State.EXPOSED: 0, State.DEAD: 0,
                      State.SUSCEPTIBLE: p.N_AGENTS}
 
     def add_agent(self, agent):
