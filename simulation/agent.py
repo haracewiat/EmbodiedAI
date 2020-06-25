@@ -145,11 +145,13 @@ class Agent(pygame.sprite.Sprite):  # super class
             elif self.state == State.INFECTIOUS:
                 swarm.data[State.SUSCEPTIBLE] -= 1
             elif self.state == State.EXPOSED: 
-                swarm.data[State.INFECTIOUS] += 1
+                swarm.data[State.SUSCEPTIBLE] -= 1
+            elif self.state == State.INFECTIOUS: 
+                swarm.data[State.EXPOSED] -= 1
             elif self.state == State.DEAD: 
-                swarm.data[State.INFECTIOUS] += 1
+                swarm.data[State.INFECTIOUS] -= 1
+            
             else:
-                
                 swarm.data[self.state] += 1
 
 
@@ -171,14 +173,13 @@ class Agent(pygame.sprite.Sprite):  # super class
             self.color = config.EXPOSED
         elif self.state == State.DEAD:
             self.color = config.DEAD
-        elif self.state == State.BIRTH:
-            self.color = config.BIRTH
+        
 
 
 class State(Enum):
     SUSCEPTIBLE = 0
-    INFECTIOUS = 2
-    EXPOSED = 1
+    INFECTIOUS = 1
+    EXPOSED = 2
     RECOVERED = 3
     DEAD = 4
 

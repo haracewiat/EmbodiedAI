@@ -83,7 +83,7 @@ class Person(Agent):
                 self.agent_lifespan = 0
             
             else:
-                self.agent_lifespan += 1.4
+                self.agent_lifespan += 0.4
 
                 
     def dead(self):
@@ -108,11 +108,8 @@ class Person(Agent):
         person = Person(pos=np.array(coordinates),
                             v=None, population=self.swarm)
 
-                # Re-estimate the coordinates if walls are present
-        
-
             # Add to the population
-        self.add_agent(person)
+        self.swarm.add_agent(person)
                 
 
 
