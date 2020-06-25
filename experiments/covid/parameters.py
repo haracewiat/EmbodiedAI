@@ -57,11 +57,11 @@ RADIUS_VIEW = WIDTH*7
 REDUCED_RADIUS_VIEW = RADIUS_VIEW * 0.5
 
 # Infection settings
-INFECTION_TIME = DAY * 2.5               # How much the recovery lasts
+INFECTION_TIME = DAY * 2                 # How much the recovery lasts
 MARGIN_INFECTION = INFECTION_TIME * 0.3  # Margin of recovery time
 INFECTION_RATE = 0.01                    # Chance of infecting others
 REDUCED_INFECTION_RATE = INFECTION_RATE * 0.5
-NEVER_INFECTIOUS = 0.005                 # Chance of never becoming infectious
+NEVER_INFECTIOUS = 0.01                  # Chance of never becoming infectious
 
 # Exposed state settings
 EXPOSED_TIME = DAY * 2.5                 # How much the exposed phase lasts
