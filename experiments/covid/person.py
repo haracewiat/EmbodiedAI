@@ -5,6 +5,7 @@ from simulation.agent import Agent
 from simulation.agent import State
 from simulation import helperfunctions
 from experiments.covid import parameters as p
+
 import random
 
 
@@ -47,6 +48,7 @@ class Person(Agent):
 
         self.exposed()
         self.dying()
+        self.dead()
 
     def infect(self):
         if self.state == State.INFECTIOUS:
@@ -70,11 +72,21 @@ class Person(Agent):
 
     def dying(self):
          if self.state == State.INFECTIOUS: 
-            if self.agent_lifespan >= self.recovery_time:
+            if self.agent_lifespan >= self.dying_chance:
                 self.change_state(State.DEAD, self.swarm)
                 self.agent_lifespan = 0
             else:
-                self.agent_lifespan += 1
+                self.agent_lifespan += 0.4
+                
+    def dead(self):
+        if self.state == State.DEAD: 
+            self.v = 0 #if death stand still
+            self.kill()
+
+    def kill(self):
+        pygame.sprite.Sprite.kill(self)
+            
+
 
             
 

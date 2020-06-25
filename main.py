@@ -14,3 +14,6 @@ if __name__ == "__main__":
     sim = Simulation(num_agents=p.N_AGENTS, screen_size=p.SCREEN,
                      swarm_type=p.SWARM, iterations=p.FRAMES)
     sim.run()
+
+
+
