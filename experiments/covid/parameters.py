@@ -16,13 +16,14 @@ FRAMES = -1
 SWARM = 'Covid'
 N_AGENTS = 100
 DAY = 200
-BUILDINGS, WALLS = s.scenario3()
+BUILDINGS, WALLS = s.scenario0()
 
 # Policies
 SOCIAL_DISTANCING = False
+MASKS = N_AGENTS * 0       # Fraction of people wearing masks
 
 # Data tracking (store data in a csv file and show live plot)
-TRACK_DATA = True
+TRACK_DATA = False
 DELAY = 10                 # Seconds to dealy the start of the simulation
 INTERVAL = 50              # Pace at which the plot is refreshed
 
@@ -47,6 +48,7 @@ MAX_FORCE = 8.
 
 # Infection settings
 RADIUS_VIEW = WIDTH*7
+REDUCED_RADIUS_VIEW = RADIUS_VIEW * 0.5   # How much a mask reduces the range
 INFECTION_TIME = DAY * 2        # How much the recovery lasts
 MARGIN = INFECTION_TIME * 0.3   # How much the recovery time can differ among agents
 INFECTION_RATE = 0.01

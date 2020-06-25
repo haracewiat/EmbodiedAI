@@ -23,11 +23,18 @@ class Agent(pygame.sprite.Sprite):  # super class
                  dT=None):
         super(Agent, self).__init__()
 
+        # State settings
         self.state = State.SUSCEPTIBLE
         self.color = color
 
+        # Partition settings
         self.partition_key = None
 
+        # Mask settings
+        self.wears_mask = False
+        self.radius = p.RADIUS_VIEW
+
+        # Graphical settings
         self.image_file = image
         if self.image_file != None:  # load image from file
             self.base_image, self.rect = helperfunctions.image_with_rect(self.image_file, [
@@ -147,10 +154,24 @@ class Agent(pygame.sprite.Sprite):  # super class
             # swarm.data[State[self.state] - 1] -= 1
             swarm.data[self.state] += 1
 
+    def add_mask(self):
+        self.wears_mask = True
+        self.radius = p.REDUCED_RADIUS_VIEW
+        self.draw()
+
     def draw(self):
         self.image = pygame.Surface((p.WIDTH, p.HEIGHT), pygame.SRCALPHA)
         pygame.gfxdraw.filled_circle(self.image, int(
             p.WIDTH/2), int(p.WIDTH/2), int(p.WIDTH/2)-1, self.color)
+
+        if bool(self.wears_mask):
+            width = p.WIDTH * 0.6
+            height = p.HEIGHT * 0.3
+            x = (p.WIDTH - width) / 2
+            y = (p.HEIGHT - height) / 2
+            pygame.draw.rect(self.image, (255, 255, 255),
+                             (x, y, width, height))
+
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
 

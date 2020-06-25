@@ -134,7 +134,7 @@ class Swarm(pygame.sprite.Sprite):
 
         distance = helperfunctions.dist(agent.pos, neighbour.pos)
 
-        if distance < radius:
+        if distance < agent.radius and distance < neighbour.radius:
             if random.random() <= p.INFECTION_RATE:
                 neighbour.change_state(State.INFECTIOUS, self.swarm)
                 agent.reproduction_rate += 1

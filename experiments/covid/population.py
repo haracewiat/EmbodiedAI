@@ -46,6 +46,10 @@ class Population(Swarm):
             if agent < p.INITIAL_INFECTED:
                 person.change_state(State.INFECTIOUS, self.swarm)
 
+            # Add masks to the initial number of people
+            if agent < p.MASKS:
+                person.add_mask()
+
             # Add to the population
             self.add_agent(person)
 

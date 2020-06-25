@@ -42,7 +42,7 @@ class Person(Agent):
 
     def infect(self):
         if self.state == State.INFECTIOUS:
-            self.swarm.spread_infection(self, p.RADIUS_VIEW)
+            self.swarm.spread_infection(self, self.radius)
 
     def recover(self):
         if self.state == State.INFECTIOUS:
