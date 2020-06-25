@@ -10,10 +10,16 @@ from simulation.agent import State
 
 class Population(Swarm):
 
+   
+
+
     def __init__(self, screen_size):
         super(Population, self).__init__(screen_size)
         self.num_agents = 0
         self.swarm = None
+
+
+     
 
     def initialize(self, num_agents, swarm):
         self.num_agents = num_agents
@@ -48,6 +54,12 @@ class Population(Swarm):
 
             # Add to the population
             self.add_agent(person)
+
+            # if self.agent_lifespan >= self.dying_chance:
+            #     self.add_agent(Person)
+            #     self.agent_lifespan = 0
+            # else:
+            #     self.agent_lifespan += 1
 
     def spawn_buildings(self):
         buildings = p.BUILDINGS
@@ -109,3 +121,4 @@ class Population(Swarm):
             self.basic_reproduction_number = [y]
 
         return round(y, 1)
+   

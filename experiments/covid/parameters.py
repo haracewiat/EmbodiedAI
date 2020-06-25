@@ -14,7 +14,7 @@ USE_PARTITIONS = True
 # Simulation settings
 FRAMES = -1
 SWARM = 'Covid'
-N_AGENTS = 100
+N_AGENTS = 10
 DAY = 200
 DIE = 10
 BUILDINGS, WALLS = s.scenario2()

@@ -171,6 +171,8 @@ class Agent(pygame.sprite.Sprite):  # super class
             self.color = config.EXPOSED
         elif self.state == State.DEAD:
             self.color = config.DEAD
+        elif self.state == State.BIRTH:
+            self.color = config.BIRTH
 
 
 class State(Enum):
