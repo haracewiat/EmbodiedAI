@@ -17,11 +17,11 @@ SWARM = 'Covid'
 N_AGENTS = 100
 DAY = 200
 BUILDINGS, WALLS = s.scenario0()
-SEIR = False
+SEIR = True
 VITAL_DYNAMICS = True
 
 # Policies
-SOCIAL_DISTANCING = False
+SOCIAL_DISTANCING = True
 MASKS = N_AGENTS * 0       # Fraction of people wearing masks
 
 # Data tracking (store data in a csv file and show live plot)
@@ -48,11 +48,13 @@ MAX_SPEED = int(S_WIDTH * 0.006)
 MIN_SPEED = int(S_WIDTH * 0.005)
 MAX_FORCE = 8.
 RADIUS_VIEW = WIDTH*7
+REDUCED_RADIUS_VIEW = RADIUS_VIEW * 0.5
 
 # Infection settings
 INFECTION_TIME = DAY * 2.5               # How much the recovery lasts
 MARGIN_INFECTION = INFECTION_TIME * 0.3  # Margin of recovery time
 INFECTION_RATE = 0.01                    # Chance of infecting others
+REDUCED_INFECTION_RATE = INFECTION_RATE * 0.5
 NEVER_INFECTIOUS = 0.1                   # Chance of never becoming infectious
 
 # Exposed state settings

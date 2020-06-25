@@ -60,15 +60,18 @@ class Population(Swarm):
         self.data[agent.state] -= 1
 
         # For every dead person, spawn a new one
-        self.add_person()
+        self.add_person(agent.wears_mask)
 
-    def add_person(self):
+    def add_person(self, mask):
         # Generate starting coordinates
         coordinates = helperfunctions.generate_coordinates(self.screen)
 
         # Create a new person
         person = Person(pos=np.array(coordinates),
                         v=None, population=self.swarm)
+
+        # Add mask to keep balance (if previous person had one)
+        person.wears_mask = mask
 
         # Re-estimate the coordinates if walls are present
         self.avoid_walls(person)

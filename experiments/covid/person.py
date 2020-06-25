@@ -105,7 +105,7 @@ class Person(Agent):
             self.ALIVE = False
 
     def change_direction(self):
-        if random.random() <= 0.001:
+        if random.random() <= 0.01:
             self.v = self.set_velocity()
 
     def get_lifespan(self):
