@@ -21,8 +21,14 @@ SEIR = True
 VITAL_DYNAMICS = True
 
 # Policies
-SOCIAL_DISTANCING = True
-MASKS = N_AGENTS * 0       # Fraction of people wearing masks
+SOCIAL_DISTANCING = False
+
+# Two mask options:
+# Number of infected people needed to enforce everyone to wear a mask
+ENFORCE_MASKS_UPPER_THRESHOLD = N_AGENTS * 0.2
+ENFORCE_MASKS_BOTTOM_THRESHOLD = N_AGENTS * 0.1
+# Fraction of people wearing masks at all times
+MASKS = N_AGENTS * 0
 
 # Data tracking (store data in a csv file and show live plot)
 TRACK_DATA = True
@@ -55,12 +61,12 @@ INFECTION_TIME = DAY * 2.5               # How much the recovery lasts
 MARGIN_INFECTION = INFECTION_TIME * 0.3  # Margin of recovery time
 INFECTION_RATE = 0.01                    # Chance of infecting others
 REDUCED_INFECTION_RATE = INFECTION_RATE * 0.5
-NEVER_INFECTIOUS = 0.1                   # Chance of never becoming infectious
+NEVER_INFECTIOUS = 0.005                 # Chance of never becoming infectious
 
 # Exposed state settings
 EXPOSED_TIME = DAY * 2.5                 # How much the exposed phase lasts
 MARGIN_EXPOSED = EXPOSED_TIME * 0.2      # Margin of exposed time
 
 # Lifespan settings
-LIFESPAN = DAY * 9                       # How much the lifespan is
+LIFESPAN = DAY * 10                      # How much the lifespan is
 MARGIN_LIFESPAN = LIFESPAN * 0.3         # Margin of lifespan

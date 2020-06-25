@@ -49,6 +49,9 @@ class Person(Agent):
             if p.SOCIAL_DISTANCING:
                 self.swarm.avoid_neighbours(self)
 
+            # Put a mask on if enforced
+            self.put_mask()
+
             # If infected, spread the infection
             self.infect()
 
@@ -105,8 +108,14 @@ class Person(Agent):
             self.ALIVE = False
 
     def change_direction(self):
-        if random.random() <= 0.01:
+        if random.random() <= 0.001:
             self.v = self.set_velocity()
+
+    def put_mask(self):
+        if self.swarm.data[State.INFECTIOUS] >= p.ENFORCE_MASKS_UPPER_THRESHOLD:
+            self.add_mask()
+        elif self.swarm.data[State.INFECTIOUS] <= p.ENFORCE_MASKS_BOTTOM_THRESHOLD:
+            self.remove_mask()
 
     def get_lifespan(self):
         return random.randint(p.LIFESPAN-p.MARGIN_LIFESPAN, p.LIFESPAN + p.MARGIN_LIFESPAN)

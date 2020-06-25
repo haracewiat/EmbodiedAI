@@ -158,6 +158,11 @@ class Agent(pygame.sprite.Sprite):  # super class
         self.radius = p.REDUCED_RADIUS_VIEW
         self.draw()
 
+    def remove_mask(self):
+        self.wears_mask = False
+        self.radius = p.RADIUS_VIEW
+        self.draw()
+
     def draw(self):
         self.image = pygame.Surface((p.WIDTH, p.HEIGHT), pygame.SRCALPHA)
         pygame.gfxdraw.filled_circle(self.image, int(
