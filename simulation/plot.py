@@ -57,16 +57,20 @@ class LivePlot():
 
         plt.cla()
 
+        # for index, data_point in enumerate(data_points):
+        #     plt.plot(
+        #         x, data_points[index], label=self.labels[index])
+
         plt.stackplot(x, data_points, labels=self.labels,
                       colors=self.colors)
 
         plt.legend(loc='upper left')
 
-        if not self.queue.empty():
-            self.r_value = self.queue.get()
+        # if not self.queue.empty():
+        #     self.r_value = self.queue.get()
 
-        plt.title("Basic Reproduction Number: " +
-                  str(self.r_value + 0.0), fontdict=None, loc='center', fontsize=15)
+        # plt.title("Basic Reproduction Number: " +
+        #          str(self.r_value + 0.0), fontdict=None, loc='center', fontsize=15)
 
 
 class Data():

@@ -10,16 +10,10 @@ from simulation.agent import State
 
 class Population(Swarm):
 
-   
-
-
     def __init__(self, screen_size):
         super(Population, self).__init__(screen_size)
         self.num_agents = 0
         self.swarm = None
-
-
-     
 
     def initialize(self, num_agents, swarm):
         self.num_agents = num_agents
@@ -55,11 +49,31 @@ class Population(Swarm):
             # Add to the population
             self.add_agent(person)
 
-            # if self.agent_lifespan >= self.dying_chance:
-            #     self.add_agent(Person)
-            #     self.agent_lifespan = 0
-            # else:
-            #     self.agent_lifespan += 1
+    def remove_person(self, agent):
+        agent.kill()
+
+        # Remove the agent from the data
+        self.data[agent.state] -= 1
+
+        # For every dead person, spawn a new one
+        self.add_person()
+
+    def add_person(self):
+        # Generate starting coordinates
+        coordinates = helperfunctions.generate_coordinates(self.screen)
+
+        # Create a new person
+        person = Person(pos=np.array(coordinates),
+                        v=None, population=self.swarm)
+
+        # Re-estimate the coordinates if walls are present
+        self.avoid_walls(person)
+
+        # Add to the population
+        self.add_agent(person)
+
+        # Add the person to the data
+        self.data[person.state] += 1
 
     def spawn_buildings(self):
         buildings = p.BUILDINGS
@@ -106,13 +120,6 @@ class Population(Swarm):
         self.previous_infected = self.current_infected
         self.current_infected = self.data[State.INFECTIOUS]
 
-        x = []
-
-        # for agent in self.agents:
-        #     if agent.state != State.SUSCEPTIBLE:
-        #         x.append(agent.reproduction_rate)
-
-        # # print(x)
         y = self.current_infected / self.previous_infected if self.previous_infected > 0 else 0
 
         if self.data[State.SUSCEPTIBLE] < p.N_AGENTS and self.data[State.INFECTIOUS] == 0:
@@ -121,4 +128,3 @@ class Population(Swarm):
             self.basic_reproduction_number = [y]
 
         return round(y, 1)
-   

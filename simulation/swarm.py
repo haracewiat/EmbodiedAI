@@ -26,8 +26,7 @@ class Swarm(pygame.sprite.Sprite):
         self.objects = Objects()
 
         # Virus spread data
-        self.data = {State.INFECTIOUS: 0, State.RECOVERED: 0, State.EXPOSED: 0, State.DEAD: 0,
-                     State.SUSCEPTIBLE: p.N_AGENTS}
+        self.data = self.get_data_frame()
 
     def add_agent(self, agent):
 
@@ -136,8 +135,26 @@ class Swarm(pygame.sprite.Sprite):
 
         if distance < radius:
             if random.random() <= p.INFECTION_RATE:
-                neighbour.change_state(State.EXPOSED, self.swarm)
+
+                if p.SEIR:
+                    neighbour.change_state(State.EXPOSED, self.swarm)
+                else:
+                    neighbour.change_state(State.INFECTIOUS, self.swarm)
+
                 agent.reproduction_rate += 1
+
+    '''
+    DATA FRAME
+    
+    '''
+
+    def get_data_frame(self):
+        if p.SEIR:
+            return {State.INFECTIOUS: 0, State.EXPOSED: 0, State.RECOVERED: 0,
+                    State.SUSCEPTIBLE: p.N_AGENTS}
+        else:
+            return {State.INFECTIOUS: 0, State.RECOVERED: 0,
+                    State.SUSCEPTIBLE: p.N_AGENTS}
 
     '''
     PARTITIONS

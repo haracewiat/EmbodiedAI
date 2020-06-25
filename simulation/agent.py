@@ -131,29 +131,20 @@ class Agent(pygame.sprite.Sprite):  # super class
     def reset_frame(self):
         self.steering = np.zeros(2)
 
-    def change_state(self, state, swarm):
-        if self.state != state:
-            self.state = state
+    def change_state(self, new_state, swarm):
+
+        if self.state != new_state:
+
+            # Update data
+            swarm.data[self.state] -= 1
+            swarm.data[new_state] += 1
+
+            # Update state
+            self.state = new_state
 
             # Update drawing
             self.set_color()
             self.draw()
-
-            # Update data
-            if self.state == State.RECOVERED:
-                swarm.data[State.INFECTIOUS] -= 1
-            elif self.state == State.INFECTIOUS:
-                swarm.data[State.SUSCEPTIBLE] -= 1
-            elif self.state == State.EXPOSED: 
-                swarm.data[State.SUSCEPTIBLE] -= 1
-            elif self.state == State.INFECTIOUS: 
-                swarm.data[State.EXPOSED] -= 1
-            elif self.state == State.DEAD: 
-                swarm.data[State.INFECTIOUS] -= 1
-            
-            else:
-                swarm.data[self.state] += 1
-
 
     def draw(self):
         self.image = pygame.Surface((p.WIDTH, p.HEIGHT), pygame.SRCALPHA)
@@ -163,23 +154,11 @@ class Agent(pygame.sprite.Sprite):  # super class
         self.mask = pygame.mask.from_surface(self.image)
 
     def set_color(self):
-        if self.state == State.SUSCEPTIBLE:
-            self.color = config.SUSCEPTIBLE
-        elif self.state == State.INFECTIOUS:
-            self.color = config.INFECTIOUS
-        elif self.state == State.RECOVERED:
-            self.color = config.RECOVERED
-        elif self.state == State.EXPOSED:
-            self.color = config.EXPOSED
-        elif self.state == State.DEAD:
-            self.color = config.DEAD
-        
+        self.color = config.PYGAME_COLORS[State(self.state).name]
 
 
 class State(Enum):
     SUSCEPTIBLE = 0
-    INFECTIOUS = 1
-    EXPOSED = 2
+    EXPOSED = 1
+    INFECTIOUS = 2
     RECOVERED = 3
-    DEAD = 4
-
