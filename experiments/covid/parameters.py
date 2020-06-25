@@ -22,6 +22,7 @@ VITAL_DYNAMICS = True
 
 # Policies
 SOCIAL_DISTANCING = False
+MASKS = N_AGENTS * 0       # Fraction of people wearing masks
 
 # Data tracking (store data in a csv file and show live plot)
 TRACK_DATA = True
